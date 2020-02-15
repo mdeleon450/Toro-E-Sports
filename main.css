@@ -15,16 +15,21 @@ html,body{
     background-color: #860038;
 }
 .logo{
-    display:inline-flex;
-    margin: 1em;
+    display:inline;
+    float: left;
+    padding-left: 15px;
+    padding-top: 1em;
     width: 240px;
-    cursor: pointer;;
+    cursor: pointer;
 }
-.menu{
-    display: inline-flex;
+.esport{
+    display: inline;
+    width: 200px;
+    float: right;
+    cursor: pointer;
 }
-nav{
-    display:inline-flex;
+.menu, nav{
+    display:inline;
 }
 ul{
     background-color: #860038;
@@ -36,13 +41,16 @@ ul{
 }
 li{
     float: left;
+    margin-left: 1em;
 }
 li a{
-    font-size: 24px;
+    
+    font-size: 22px;
+    margin-top: 1em;
     display: inline-flex;
     color: #fff;
     text-align: center;
-    padding: 14px 30px;
+    padding: 10px 10px;
     text-decoration: none;
 }
 li a:hover{
@@ -54,4 +62,32 @@ li a:hover{
     height: 80%;
     width: 90%;
     background-color: #fff;
+}
+.searchbar{
+    display: inline-flex;
+    float: right;
+    overflow: hidden;
+    
+}
+.searchbar input[type =text]{
+    outline: none;
+    float: inline-start;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 17px;
+    border: 1px solid grey;
+    background-color: transparent;
+    border-radius: 100px;
+}
+.searchbar button{
+    float: inline-end;
+    display: block;
+    outline: none;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    background-color: transparent;
+    border-radius: 10px;
+    margin-top: 5px;
+    padding: 5px 5px;
 }
