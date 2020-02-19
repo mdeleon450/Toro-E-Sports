@@ -91,3 +91,9 @@ li a:hover{
     margin-top: 5px;
     padding: 5px 5px;
 }
+.img {
+    float:  left;
+    width:  150px;
+    height: 200px;
+    background-size: cover;
+}
