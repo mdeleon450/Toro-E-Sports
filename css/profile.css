@@ -18,6 +18,9 @@ aside{
     padding: 2em;
 }
 
+.imenu{
+    display: block;
+}
 img{
     width: 40px;
     cursor: pointer;
@@ -31,10 +34,6 @@ figcaption{
     font-size: 1.3em;
     font-weight: bold;
 
-}
-
-nav{
-    background: #fff;
 }
 
 .active{
@@ -119,7 +118,7 @@ p{
         padding: 2em;
     }
     
-    img{
+    img,.imenu{
         display: none;
     }
 

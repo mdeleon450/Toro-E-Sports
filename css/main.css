@@ -9,7 +9,7 @@ html,body{
 .imenu{
     display: inline-block;
     cursor: pointer;
-    float: left;
+    float: right;
     width: 40px;
     padding: .5em;
 }
@@ -35,33 +35,36 @@ html,body{
     float: right;
     cursor: pointer;
 }
-.menu,nav{
-    display: inline;
+.menu{
+    display: block;
 }
-.ul{
-    background-color: #860038;
-    top:0;
-    width: 90%;
+ul.active{
+    position: absolute;
+    display: block;
+    background: #DCE1F6;
+    width: 40%;
+    left: 0;
+    top: 0%;
+    height: auto;
+}
+li:hover{
+    background-color: #550101;
+}
+ul{
+    display: none;
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
-li{
-    float: left;
-    margin-left: .1em;
-}
-li a{
-    
-    font-size: 20px;
-    margin-top: 0em;
-    display: inline-flex;
-    color: #fff;
-    text-align: center;
-    padding: 10px 10px;
+
+ul li a{
     text-decoration: none;
-}
-li a:hover{
-    background-color: #550101;
+    text-transform: uppercase;
+    font-size: .8em;
+    display: block;
+    padding: 1.5em 3em;
+    background-color: rgba(255,255,255,.35);
+    color: #000;
 }
 .content{
     display: block;
@@ -106,6 +109,8 @@ li a:hover{
     background-size: cover;
 }
 #mainContent,#subContent{
+    margin-top: 0;
+    padding-top: .5em;
     margin-left: 1em;
 }
 @media only screen and (min-width: 768px){
@@ -136,38 +141,33 @@ html,body{
     cursor: pointer;
 }
 .esport{
-    display: inline;
+    display: inline-block;
     width: 200px;
     float: right;
     cursor: pointer;
 }
 .menu, nav{
-    display:inline;
+    display:inline-block;
 }
 ul{
-    background-color: #860038;
-    top:0;
-    width: 100%;
+    display: inline-block;
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
-li{
-    float: left;
-    margin-left: 1em;
-}
-li a{
-    
-    font-size: 22px;
-    margin-top: 1em;
-    display: inline-flex;
+ul li a{
+    background-color: #860038;
     color: #fff;
-    text-align: center;
-    padding: 10px 10px;
-    text-decoration: none;
 }
-li a:hover{
+li{
+    display: inline-block;
+    padding-top: 2em;
+}
+a:hover{
     background-color: #550101;
+}
+li:hover{
+    background-color:#860038;
 }
 .content{
     display: block;

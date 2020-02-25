@@ -32,5 +32,16 @@
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
     </div>
+    <script>
+        (function() {
+            var menu = document.querySelector('ul'),
+            menulink = document.querySelector('img');
+
+            menulink.addEventListener('click',function(e) {
+                menu.classList.toggle('active');
+                e.preventDefault();
+            });
+        })();
+    </script>
 </body>
 </html>
