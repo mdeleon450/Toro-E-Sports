@@ -131,7 +131,7 @@ p{
     
     main{
         padding: 4em;
-        height: 500px ;
+        height: auto;
         background: white no-repeat bottom right;
         background-size: 70%;
     }
