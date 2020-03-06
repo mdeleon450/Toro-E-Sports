@@ -67,40 +67,14 @@ ul li a{
     color: #000;
 }
 .content{
+    color: #fff;
     display: block;
     margin-left: auto;
     margin-right: auto;
     height: 80%;
-    width: 90%;
-    background-color: #fff;
-}
-.searchbar{
-    display: inline-flex;
-    float: right;
-    overflow: hidden;
-    
-}
-.searchbar input[type =text]{
-    outline: none;
-    float: inline-start;
-    padding: 8px;
-    margin-top: 5px;
-    font-size: 17px;
-    border: 1px solid grey;
-    background-color: transparent;
-    border-radius: 100px;
-}
-.searchbar button{
-    float: inline-end;
-    display: block;
-    outline: none;
-    text-decoration: none;
-    text-align: center;
-    font-weight: bold;
-    background-color: transparent;
-    border-radius: 10px;
-    margin-top: 5px;
-    padding: 5px 5px;
+    width: 80%;
+    background-color: #860038;
+    border-radius: 25px;
 }
 .img {
     float:  left;
@@ -108,14 +82,46 @@ ul li a{
     height: 200px;
     background-size: cover;
 }
-#mainContent,#subContent{
-    margin-top: 0;
+h1{
+    margin: 0;
+    text-align: center;
     padding-top: .5em;
-    margin-left: 1em;
+}
+.signCont{
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    height: 75%;
+    display: block;
+    border-radius: 25px;
+    background-color: #fff;
+}
+.form{
+    display: block;
+    text-align: center;
+    padding-top: 25%;
+    color: #000;
+}
+.button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #860038;
+    padding: .5em 1.5em;
+    border-color: transparent;
+    border-radius: 4px;
+}
+label{
+    text-align: center;
+    font-weight: bold;
 }
 @media only screen and (min-width: 768px){
 html,body{
-    height: 150%;
+    height: 100%;
     font-family: 'Montserrat';
     margin: 0;
     padding: 0;
@@ -172,41 +178,13 @@ li:hover{
     background-color:#860038;
 }
 .content{
+    margin-top: 1em;
     display: block;
     margin-left: auto;
     margin-right: auto;
     height: 80%;
-    width: 90%;
-    background-color: #fff;
-}
-.searchbar{
-    padding-top: 1em;
-    display: inline-flex;
-    float: right;
-    overflow: hidden;
-    
-}
-.searchbar input[type =text]{
-    outline: none;
-    float: inline-start;
-    padding: 8px;
-    margin-top: 5px;
-    font-size: 17px;
-    border: 1px solid grey;
-    background-color: transparent;
-    border-radius: 100px;
-}
-.searchbar button{
-    float: inline-end;
-    display: block;
-    outline: none;
-    text-decoration: none;
-    text-align: center;
-    font-weight: bold;
-    background-color: transparent;
-    border-radius: 10px;
-    margin-top: 5px;
-    padding: 5px 5px;
+    width: 70%;
+    background-color: #860038;
 }
 .img {
     float:  left;
@@ -217,5 +195,42 @@ li:hover{
 #mainContent,#subContent{
     margin-top: 0;
     padding-top: 1em;
+}
+h1{
+    margin: 0;
+    text-align: center;
+    padding-top: .5em;
+}
+.signCont{
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    height: 75%;
+    display: block;
+    border-radius: 25px;
+    background-color: #fff;
+}
+.form{
+    display: block;
+    text-align: center;
+    padding-top: 10%;
+    color: #000;
+}
+.button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #860038;
+    padding: .5em 1.5em;
+    border-color: transparent;
+    border-radius: 4px;
+}
+label{
+    text-align: center;
+    font-weight: bold;
 }
 }

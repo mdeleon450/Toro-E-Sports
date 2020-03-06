@@ -1,37 +1,48 @@
+<?php
+// Initialize the session
+session_start();
+ 
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: index1.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/main.css">
-    <title>	Profile</title>
+    <link rel="stylesheet" href="css/profile.css">
+    <title>	My Team</title>
 </head>
 <body>
     <aside>
         <figure>
             <div id = "avatar"></div>
-            <figcaption>User Name</figcaption>
+            <figcaption><?php echo $_SESSION["username"]?></figcaption>
         </figure>
+        <img class = "imenu" src = "images/menu.svg">
         <img src = "images/toro.jpeg">
         <nav>
             <div id="mtabs">
                 <ul>
-					<li><a href="index.html">Home</a></li>
-                    <li><a href="profile.html">My Profile</a></li>
-                    <li><a href="myteam.html">My Team</a></li>
-                    <li><a href="mytournaments.html">My Tournaments</a></li>
-                    <li><a href="inbox.html">Inbox</a></li>
+					<li><a href="..\index.php">Home</a></li>
+                    <li><a href="profile.php">My Profile</a></li>
+                    <li><a href="myteam.php">My Team</a></li>
+                    <li><a href="myladders.php">My Ladders</a></li>
+                    <li><a href="inbox.php">Inbox</a></li>
                 </ul>
             </div>
         </nav>
     </aside>
     <main>
         <h1 id = "mainContent">
-            Recent Matches
+            My Team
         </h1>
         <p id = "subContent">
-            Here recent matches will show
+            Team information such as roster, team wins, team losses etc
         </p>
     </main>
     <script>

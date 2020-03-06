@@ -1,3 +1,8 @@
+<?php
+// Initialize the session
+session_start();
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,20 +10,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
     <title>Tournaments</title>
 </head>
 <body>
     <div class = "banner">
+			<img class = "imenu" src = "images/menu.svg">
             <img class = "logo" src = "images/csudh.png">
 			<nav>
                 <div id = "mtabs">
                     <ul>
-                        <li><a class="active" href = "index.html">Home</a></li>
-                        <li><a href = "tournaments.html">Tournaments</a></li>
-                        <li><a href = "leaderboards.html">Leaderboards</a></li>
-                        <li><a href = "teams.html">Teams</a></li>
-                        <li><a href = "profile.html">Profile</a></li>  
+                        <li><a class="active" href = "index.php">Home</a></li>
+                        <li><a href = "ladders.php">Ladders</a></li>
+                        <li><a href = "leaderboards.php">Leaderboards</a></li>
+                        <li><a href = "teams.php">Teams</a></li>
+                        <?php 	// Check if the user is already logged in
+								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
+									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+								}
+								
+								else echo "<li><a href = 'signin.php'>Sign In</a></li>";
+						?> 
                     </ul>
                 </div>
             </nav>
@@ -32,7 +45,7 @@
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
 		<div>
-		<h1>Tournaments</h1>
+		<h1 id="mainContent">Tournaments</h1>
 		<p>Filter by Game<p>
 		<a href = ""><div class="img" style="background-image:url('images/games/fifa20.jpeg');"></div></a>
 		<div class="img" style="background-image:url('images/games/rocketleague.jpg');"></div>
@@ -61,6 +74,17 @@
 				</tbody>
 			</table>
 		</div>
-    </div>
+	</div>
+	<script>
+        (function() {
+            var menu = document.querySelector('ul'),
+            menulink = document.querySelector('img');
+
+            menulink.addEventListener('click',function(e) {
+                menu.classList.toggle('active');
+                e.preventDefault();
+            });
+        })();
+    </script>
 </body>
 </html>
