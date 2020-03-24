@@ -1,4 +1,8 @@
 <?php
+
+// Include config file
+require_once "..\config.php";
+
 // Initialize the session
 session_start();
  
@@ -42,7 +46,26 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             My Team
         </h1>
         <p id = "subContent">
-            Team information such as roster, team wins, team losses etc
+			<?php
+			$username = $_SESSION["username"];
+			
+			$result = mysqli_query($link, "SELECT team_idteam FROM user WHERE username = '$username' LIMIT 1");
+			$row = mysqli_fetch_assoc($result);
+			$teamid = $row['team_idteam'];
+			
+			if ($teamid == null){
+				echo 'Not registered in a team, please find a team <a href="..\teams.php">here</a>.';
+			}
+			
+			else {
+			
+			$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid' LIMIT 1");
+			$row = mysqli_fetch_assoc($result);
+			echo '' . $row['team_name'];
+				
+			}
+			$link->close();
+			?>
         </p>
     </main>
     <script>

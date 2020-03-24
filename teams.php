@@ -1,4 +1,8 @@
 <?php
+
+// Include config file
+require_once "config.php";
+
 // Initialize the session
 session_start();
  
@@ -47,6 +51,29 @@ session_start();
 		
 		<div>
 		<h1 id="mainContent">Teams</h1>
+			<p id = "subContent">
+				<?php
+	
+				$table = "SELECT * FROM team";
+				if ($result = $link->query($table)) {
+					while ($row = $result->fetch_assoc()) {
+						$teamname = $row["team_name"];
+						$teamwins = $row["team_wins"];
+						$teammatches = $row["team_matches"];
+						
+						echo '<br> 
+								<br>Team Name: <a href = "">'.$teamname.'</a></br> 
+								<br>Team Wins: '.$teamwins.'	</br> 
+								<br>Team Matches: '.$teammatches.'	</br> 
+							</br>';
+					}
+					
+				$link->close();
+				
+				}
+				?>
+			</p>
+		
 		</div>
     </div>
     <script>

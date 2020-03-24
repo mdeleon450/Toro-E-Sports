@@ -2,7 +2,7 @@
 $servername = "localhost:3308";
 $username = "root";
 $password = "";
-$database = "users";
+$database = "esportsladdersystem";
 
 // Create connection
 $link = mysqli_connect($servername, $username, $password, $database);

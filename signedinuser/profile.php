@@ -1,4 +1,8 @@
 <?php
+
+// Include config file
+require_once "..\config.php";
+
 // Initialize the session
 session_start();
  
@@ -20,11 +24,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <body>
     <aside>
         <figure>
-            <div id = "avatar"></div>
+            <div id = "avatar" ></div>
+			<img src = "images/toro.jpeg">
             <figcaption><?php echo $_SESSION["username"]?></figcaption>
         </figure>
         <img class = "imenu" src = "images/menu.svg">
-        <img src = "images/toro.jpeg">
+        
         <nav>
             <div id="mtabs">
                 <ul>
@@ -41,6 +46,18 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <h1 id = "mainContent">
             Recent Matches
         </h1>
+		<p id = "subContent">
+			<?php
+			$username = $_SESSION["username"];
+			
+			$result = mysqli_query($link, "SELECT created_at FROM user WHERE username = '$username' LIMIT 1");
+			$row = mysqli_fetch_assoc($result);
+			echo "Member since: " . $row['created_at'];
+				
+				
+			$link->close();
+			?>
+        </p>
         <p id = "subContent">
             Here recent matches will show
         </p>
