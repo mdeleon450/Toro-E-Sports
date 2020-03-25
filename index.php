@@ -1,7 +1,9 @@
 <?php
+// Include config file
+require_once "config.php";
+
 // Initialize the session
 session_start();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +46,29 @@ session_start();
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
         <h1 id = "mainContent">News</h1>
-        <p id = "subContent">Here will be news about eSports or relevant information</p>
+        <p id = "subContent">
+				<?php
+	
+				$table = "SELECT * FROM news";
+				if ($result = $link->query($table)) {
+					while ($row = $result->fetch_assoc()) {
+						$title = $row["title"];
+						$author = $row["author"];
+						$date = $row["date"];
+						$contents = $row["contents"];
+						echo '<br> 
+								<br>Title: '.$title.' </br> 
+								<br>Date: '.$date.'	</br> 
+								<br>'.$contents.'	</br> 
+								<br>Author: <a href = "">'.$author.'</a></br> 
+							 </br>';
+					}
+					
+				$link->close();
+				
+				}
+				?>
+			</p>
     </div>
 	<script>
         (function() {

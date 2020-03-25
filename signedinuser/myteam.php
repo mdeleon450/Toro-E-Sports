@@ -49,7 +49,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 			<?php
 			$username = $_SESSION["username"];
 			
-			$result = mysqli_query($link, "SELECT team_idteam FROM user WHERE username = '$username' LIMIT 1");
+			$result = mysqli_query($link, "SELECT team_idteam FROM user WHERE username = '$username'");
 			$row = mysqli_fetch_assoc($result);
 			$teamid = $row['team_idteam'];
 			
@@ -59,7 +59,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 			
 			else {
 			
-			$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid' LIMIT 1");
+			$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid'");
 			$row = mysqli_fetch_assoc($result);
 			echo '' . $row['team_name'];
 				

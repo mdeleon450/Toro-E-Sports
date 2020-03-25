@@ -55,11 +55,21 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 			echo "Member since: " . $row['created_at'];
 				
 				
-			$link->close();
 			?>
         </p>
         <p id = "subContent">
-            Here recent matches will show
+            <?php
+			$username = $_SESSION["username"];
+			
+			$result = mysqli_query($link, "SELECT * FROM user WHERE username = '$username' LIMIT 1");
+			$row = mysqli_fetch_assoc($result);
+			echo 
+					'<br>Wins: '.$row['player_wins'].' </br> 
+					<br>Matches: '.$row['player_matches'].' </br>';
+				
+				
+			$link->close();
+			?>
         </p>
     </main>
     <script>

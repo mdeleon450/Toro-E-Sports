@@ -1,7 +1,11 @@
 <?php
+
+// Include config file
+require_once "config.php";
+
 // Initialize the session
 session_start();
- 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,18 +53,28 @@ session_start();
 				  <tr>
 					<th>Player</th>
 					<th>Wins</th>
-					<th>Losses</th>
-				  </tr>
-				  <tr align="center">
-					<td>Faker</td>
-					<td>293</td>
-					<td>36</td>
-				  </tr>
-				  <tr align="center">
-					<td>Yassuo</td>
-					<td>250</td>
-					<td>130</td>
-				  </tr>
+					<th>Matches</th>
+				  
+				  <?php
+	
+					$table = "SELECT * FROM user";
+					if ($result = $link->query($table)) {
+						while ($row = $result->fetch_assoc()) {
+							$username = $row['username'];
+							$playerwins = $row['player_wins'];
+							$playermatches = $row['player_matches'];
+							
+							echo '<tr align = "center"> 
+									<td>'.$username.'</td>
+									<td>'.$playerwins.'</td> 
+									<td>'.$playermatches.'</td> 
+								</tr>';
+						}
+						
+					$link->close();
+					
+					}
+					?>
 				</table>
 			</div>
     </div>
