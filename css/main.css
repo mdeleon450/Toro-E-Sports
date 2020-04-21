@@ -65,12 +65,15 @@ ul li a{
     padding: 1.5em 3em;
     background-color: rgba(255,255,255,.35);
     color: #000;
+     border-radius: 10px;
 }
 .content{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    height: 80%;
+    height: auto;
+    min-height: 85%;
+    padding-bottom: 1em;
     width: 90%;
     background-color: #fff;
 }
@@ -113,9 +116,43 @@ ul li a{
     padding-top: .5em;
     margin-left: 1em;
 }
-@media only screen and (min-width: 768px){
+.entry{
+    border-radius: 10px;
+    padding-left: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom:1em;
+    display: block;
+    background-color: #d9d9d9;
+}
+.game{
+    width:  150px;
+    height: 200px;
+    background-size: cover;
+}
+.gameContainer{
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-gap: 10px;
+    margin-bottom: 2em;
+}
+.hiddenLayer{
+    display:block;
+    text-align: center;
+}
+table{
+    display: inline-table;
+    border-collapse: collapse;
+    width: 90%;
+}
+table,th,td{
+    text-align: center;
+    height: 50px;
+    border: 1px solid black;
+}
+@media only screen and (min-width: 1340px){
 html,body{
-    height: 150%;
+    height: 100%;
     font-family: 'Montserrat';
     margin: 0;
     padding: 0;
@@ -175,7 +212,8 @@ li:hover{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    height: 80%;
+    height: auto;
+    padding-bottom:1em;
     width: 90%;
     background-color: #fff;
 }
@@ -217,5 +255,38 @@ li:hover{
 #mainContent,#subContent{
     margin-top: 0;
     padding-top: 1em;
+}
+.entry{
+    border-radius: 10px;
+    padding-left: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom:1em;
+    display: block;
+    background-color: #d9d9d9;
+}
+.game{
+    width:  150px;
+    height: 200px;
+    background-size: cover;
+}
+.gameContainer{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 10px;
+}
+.hiddenLayer{
+    display:block;
+    text-align: center;
+}
+table{
+    display: inline-table;
+    border-collapse: collapse;
+    width: 90%;
+}
+table,th,td{
+    text-align: center;
+    height: 50px;
+    border: 1px solid black;
 }
 }

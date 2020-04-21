@@ -46,29 +46,31 @@ session_start();
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
         <h1 id = "mainContent">News</h1>
-        <p id = "subContent">
+        <div class = "subContainer">
 				<?php
 	
 				$table = "SELECT * FROM news";
 				if ($result = $link->query($table)) {
 					while ($row = $result->fetch_assoc()) {
+					    echo '<div class = "entry">';
 						$title = $row["title"];
 						$author = $row["author"];
 						$date = $row["date"];
 						$contents = $row["contents"];
-						echo '<br> 
-								<br>Title: '.$title.' </br> 
-								<br>Date: '.$date.'	</br> 
-								<br>'.$contents.'	</br> 
-								<br>Author: <a href = "">'.$author.'</a></br> 
-							 </br>';
+						echo '<p id = "subContent"> 
+								<h2>Title: '.$title.'</h2>
+								<h4>Date: '.$date.'	</h4> 
+								&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp '.$contents.'	
+								<br><br>Author: <a href = "">'.$author.'</a></br><br>
+							 <p>
+							 </div>';
 					}
 					
 				$link->close();
 				
 				}
 				?>
-			</p>
+			</div>
     </div>
 	<script>
         (function() {

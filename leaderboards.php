@@ -48,8 +48,8 @@ session_start();
             <input type="text" placeholder="Search..">
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
-		<div>
-				<table style="width:100%">
+		<div class = "hiddenLayer">
+				<table>
 				  <tr>
 					<th>Player</th>
 					<th>Wins</th>

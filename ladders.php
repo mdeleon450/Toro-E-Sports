@@ -47,36 +47,41 @@ session_start();
             <input type="text" placeholder="Search..">
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
-		<div>
-		<h1 id="mainContent">Ladders</h1>
-			<p>Filter by Game<p>
-			<a href = ""><div class="img" style="background-image:url('images/games/fifa20.jpeg');"></div></a>
-			<div class="img" style="background-image:url('images/games/rocketleague.jpg');"></div>
-			<div class="img" style="background-image:url('images/games/codmw.png');"></div>
-			<div class="img" style="background-image:url('images/games/smashultimate.jpg');"></div>
-			<div class="img" style="background-image:url('images/games/lol.jpg');"></div>
-		</div>
-		<div>
-			<p >
-				<?php
-	
-				$table = "SELECT * FROM ladder";
-				if ($result = $link->query($table)) {
-					while ($row = $result->fetch_assoc()) {
-						$ladderType = $row["ladderType"];
-						$ladderTime = $row["ladderTime"];
+        <h1 id="mainContent">Ladders</h1>
+	    <p id="subContent">Filter by Game</p>
+        <div class = "hiddenLayer">
+	    	<div class = "gameContainer">
+	            <div class="game" style="background-image:url('images/games/fifa20.jpeg');"></div>
+	    	    <div class="game" style="background-image:url('images/games/rocketleague.jpg');"></div>
+		        <div class="game" style="background-image:url('images/games/codmw.png');"></div>
+		        <div class="game" style="background-image:url('images/games/smashultimate.jpg');"></div>
+		        <div class="game" style="background-image:url('images/games/lol.jpg');"></div>
+		    </div>
+		    <br>
+			<table>
+			        <tr>
+			            <th>Ladder Type</th>
+			            <th>Ladder Time</th>
+			      </tr>
+				    <?php
+	    
+				    $table = "SELECT * FROM ladder";
+				    if ($result = $link->query($table)) {
+					    while ($row = $result->fetch_assoc()) {
+						    $ladderType = $row["ladderType"];
+						    $ladderTime = $row["ladderTime"];
 						
-						echo '<br> 
-								<br>Ladder Type: <a href = "">'.$ladderType.'</a></br> 
-								<br>Ladder Time: '.$ladderTime.'</br> 
-							</br>';
-					}
+						    echo '  <tr>
+								        <td><a href = "">'.$ladderType.'</a></td> 
+								        <td>'.$ladderTime.'</td> 
+							        </tr>';
+					    }
 					
-				$link->close();
+				    $link->close();
 				
-				}
-				?>
-			</p>
+				    }
+				    ?>
+			</table>
 		</div>
 	</div>
 	<script>
