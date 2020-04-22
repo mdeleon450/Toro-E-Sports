@@ -27,15 +27,17 @@ session_start();
                         <li><a class="active" href = "index.php">Home</a></li>
                         <li><a href = "ladders.php">Ladders</a></li>
                         <li><a href = "leaderboards.php">Leaderboards</a></li>
-                        <li><a href = "teams.php">Teams</a></li>
                         <?php 	// Check if the user is already logged in
 								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
 									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
 									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 								}
 								
-								else echo "<li><a href = 'signin.php'>Sign In</a></li>";
-						?>	  
+								else {
+									echo "<li><a href = 'teams.php'>Teams</a></li>";
+									echo "<li><a href = 'signin.php'>Sign In</a></li>";}
+						?>
                     </ul>
                 </div>
             </nav>
@@ -48,8 +50,8 @@ session_start();
             <input type="text" placeholder="Search..">
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
-		<div class = "hiddenLayer">
-				<table>
+		<div>
+				<table style="width:100%">
 				  <tr>
 					<th>Player</th>
 					<th>Wins</th>

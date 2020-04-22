@@ -1,10 +1,11 @@
+
+
 <?php
 // Include config file
 require_once "config.php";
 
 // Initialize the session
 session_start();
- 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,25 +51,55 @@ session_start();
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
 		<div>
-			<table id = "ladder" style="width:100%">
-
-				
 				<?php
-
-				$table = "SELECT * FROM ladder";
-				if ($result = $link->query($table)) {
-					while ($row = $result->fetch_assoc()) {
-						$ladderType = $row["ladderType"];
-						$ladderTime = $row["ladderTime"];
-						$_SESSION['ladderType'] = $ladderType;
-						echo '<br> 
-								<br>Ladder Type: <a href="ladderInfo.php">'.$ladderType.'</a></br>
-								<br>Ladder Time: '.$ladderTime.'</br> 
-							</br>';
+					$ladderType = $_SESSION['ladderType'];
+					if ($ladderType === "Single Team"){
+						echo '<h1> id="mainContent">Single Team Ladder</h1>';
+						$ladderTeams = "SELECT * FROM team_in_ladder WHERE ladder_idladder = 1";
+						
+						if($result = $link->query($ladderTeams)) {
+							while ($row = $result->fetch_assoc()) {
+								$teamid = $row["team_idteam"];
+								
+								$teamFound = mysqli_query($link, "SELECT team_name, team_owner, team_matches, team_wins FROM team WHERE idteam = '$teamid'");
+								$rowTeam = mysqli_fetch_assoc($teamFound);
+								echo '<br> 
+										<br>Team Name: <a href = "ladderInfo.php">'.$rowTeam['team_name'].'</a></br> 
+										<br>Team Owner: '.$rowTeam['team_owner'].'</br>
+										<br>Matches Played: '.$rowTeam['team_matches'].'</br> 
+										<br>Matches Won: '.$rowTeam['team_wins'].'</br> 
+									</br>';
+							}
+						}
+						else {
+							echo '<br>No Teams In Ladder</br>';
+						}
 					}
-				}
+					else {
+						echo $ladderType;
+						//echo '<h1> id="mainContent">Double Team Ladder</h1>';
+						$ladderTeams = "SELECT * FROM team_in_ladder WHERE ladder_idladder = 2";
+						
+						if ($result = $link->query($ladderTeams)) {
+							while ($row = $result->fetch_assoc()) {
+								$teamid = $row["team_idteam"];
+								
+								$teamFound = mysqli_query($link, "SELECT team_name, team_owner, team_matches, team_wins FROM team WHERE idteam = '$teamid'");
+								$rowTeam = mysqli_fetch_assoc($teamFound);
+								echo '<br> 
+										<br>Team Name: <a href = "ladderInfo.php">'.$rowTeam['team_name'].'</a></br> 
+										<br>Team Owner: '.$rowTeam['team_owner'].'</br>
+										<br>Matches Played: '.$rowTeam['team_matches'].'</br> 
+										<br>Matches Won: '.$rowTeam['team_wins'].'</br> 
+									</br>';
+							}
+						}
+						else {
+							echo '<br>No Teams In Ladder</br>';
+						}
+					}
+					$link->close();
 				?>
-			</table>
 		</div>
 	</div>
 	<script>

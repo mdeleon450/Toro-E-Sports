@@ -208,6 +208,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
 		<div>
 		<h1 id="mainContent">Teams</h1>
+			<div class = "subContent">
+				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" >
+                    <div class="form">
+                        <label>Team Name </label><br>
+                        <input type="text" name="teamname" required >
+					</div>
+					
+					<div class="form">
+						<input type="radio" name="teamtype" value="Single Team" required>
+						<label>Single Team</label>
+					</div>
+					
+					<div class="form">
+                        <input type="radio" name="teamtype" value="Double Team" required>
+						<label>Double Team</label>
+					</div>
+					
+					<div class="form">
+                        <input type="submit" class="button" value="Register Team">
+                    </div>
+					
+				</form>
+			</div>
 			<p id = "subContent">
 				<?php
 	

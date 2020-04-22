@@ -1,14 +1,14 @@
 <?php
 
 // Include config file
-require "../config.php";
+require_once "..\config.php";
 
 // Initialize the session
 session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ..\index.php");
+    header("location: index1.php");
     exit;
 }
 ?>
@@ -54,17 +54,19 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 			$teamid = $row['team_idteam'];
 			
 			if ($teamid == null){
-				echo 'Not registered in a team, please find a team <a href="..\teams.php">here</a>.';
+				echo 'Not registered in a team, please find a team <a href="..\loggedteams.php">here</a>.';
 			}
 			
 			else {
 			
-			$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid'");
-			$row = mysqli_fetch_assoc($result);
-			echo '' . $row['team_name'];
+				$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid'");
+				$row = mysqli_fetch_assoc($result);
+				echo '' . $row['team_name'];
+				
+				echo "<br><a id=\"teamdisband\" title=\"Disband Team\"
+						href=\"#\" onclick=\"disbandTeam();return false;\">Disband Team</a>";
 				
 			}
-			$link->close();
 			?>
         </p>
     </main>
@@ -79,5 +81,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             });
         })();
     </script>
+	<script>
+		function disbandTeam() {
+			window.location.href = 'disbandTeam.php';
+		}
+	</script>
 </body>
 </html>
