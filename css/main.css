@@ -150,6 +150,18 @@ table,th,td{
     height: 50px;
     border: 1px solid black;
 }
+.button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #860038;
+    padding: .5em 1.5em;
+    border-color: transparent;
+    border-radius: 4px;
+}
 @media only screen and (min-width: 1340px){
 html,body{
     height: 100%;
@@ -288,5 +300,17 @@ table,th,td{
     text-align: center;
     height: 50px;
     border: 1px solid black;
+}
+.button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: #860038;
+    padding: .5em 1.5em;
+    border-color: transparent;
+    border-radius: 4px;
 }
 }

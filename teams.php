@@ -206,22 +206,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		
 		<div>
 		<h1 id="mainContent">Teams</h1>
-			<div class = "subContent">
+			<div class = "hiddenLayer">
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" >
                     <div class="form">
-                        <label>Team Name </label><br>
+                        <label style = "font-size: 25px; font-weight: bold;">Team Name </label><br><br>
                         <input type="text" name="teamname" required >
-					</div>
+					</div><br>
 					
 					<div class="form">
 						<input type="radio" name="teamtype" value="Single Team" required>
 						<label>Single Team</label>
-					</div>
+					</div><br>
 					
 					<div class="form">
                         <input type="radio" name="teamtype" value="Double Team" required>
 						<label>Double Team</label>
-					</div>
+					</div><br>
 					
 					<div class="form">
                         <input type="submit" class="button" value="Register Team">
