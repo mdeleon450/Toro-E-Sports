@@ -30,7 +30,7 @@ session_start();
                         <?php 	// Check if the user is already logged in
 								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
-									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
+									echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
 									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 								}
 								
@@ -38,6 +38,7 @@ session_start();
 									echo "<li><a href = 'teams.php'>Teams</a></li>";
 									echo "<li><a href = 'signin.php'>Sign In</a></li>";}
 						?>
+                       
                     </ul>
                 </div>
             </nav>

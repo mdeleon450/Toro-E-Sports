@@ -79,22 +79,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
     
 	<div class = "content">
+	    <div class = "hiddenLayer">
 	    <div class = "form">
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method = "post">
 			
-                <label>Title: </label><br>
+                <label>   &nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Title:</label><br>
                 <input type="text" name="title" ><br>
 				
-                <label>Author: </label><br>	
+                <label>Author:</label><br>	
                 <input type ="text" name="author" ><br>
 				
-                <label>Contents: </label><br>
+                <label>Contents:</label><br>
 				<textarea rows="20" cols="100" type="text" name="contents" ></textarea><br>
 				
 				<div class = "form">
-					<input type="submit" class="button" value="Submit"
+					<input type="submit" class="button" value="Submit">
 				</div>
             </form>
+        </div>
         </div>
     </div>
 	<script>

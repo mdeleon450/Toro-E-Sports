@@ -185,7 +185,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <?php 	// Check if the user is already logged in
 								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
-									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
+									echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
 									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 								}
 								
@@ -205,10 +205,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <input type="text" placeholder="Search..">
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
-		
-		<div>
 		<h1 id="mainContent">Teams</h1>
-			<div class = "subContent">
+			<div class = "subContent" align = "center">
+			    
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" >
                     <div class="form">
                         <label>Team Name </label><br>
@@ -225,39 +224,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 						<label>Double Team</label>
 					</div>
 					
+					<br>
+					
 					<div class="form">
                         <input type="submit" class="button" value="Register Team">
                     </div>
 					
 				</form>
-			</div>
-			<p id = "subContent">
-				<?php
-	
-				$table = "SELECT * FROM team";
-				if ($result = $link->query($table)) {
-					while ($row = $result->fetch_assoc()) {
-						$teamname = $row["team_name"];
-						$teamowner = $row["team_owner"];
-						$teamtype = $row["team_type"];
-						$teamwins = $row["team_wins"];
-						$teammatches = $row["team_matches"];
+			</div><br>
+			<div class = "hiddenLayer">
+			    <table>
+			        <tr>
+			            <th>Team Name</th>
+			            <th>Team Owner</th>
+			            <th>Team Type</th>
+			            <th>Team Wins</th>
+			            <th>Team Matches</th>
+			        </tr>
+				    <?php
+				    $table = "SELECT * FROM team";
+				    if ($result = $link->query($table)) {
+					    while ($row = $result->fetch_assoc()) {
+						    $teamname = $row["team_name"];
+						    $teamowner = $row["team_owner"];
+						    $teamtype = $row["team_type"];
+						    $teamwins = $row["team_wins"];
+						    $teammatches = $row["team_matches"];
 						
-						echo '<br> 
-								<br>Team Name: <a href = "">'.$teamname.'</a></br> 
-								<br>Team Owner: <a href = "">'.$teamowner.'</a></br> 
-								<br>Team Type: '.$teamtype.'	</br> 
-								<br>Team Wins: '.$teamwins.'	</br> 
-								<br>Team Matches: '.$teammatches.'	</br> 
-							</br>';
+						echo '<tr> 
+								<td><a href = "">'.$teamname.'</a></td> 
+								<td><a href = "">'.$teamowner.'</a></td> 
+								<td>'.$teamtype.'	</td> 
+								<td>'.$teamwins.'	</td> 
+								<td>'.$teammatches.'	</td> 
+							</tr>';
 					}
 					
 				$link->close();
 				
 				}
 				?>
-			</p>
-		
+			</table>
 		</div>
     </div>
     <script>

@@ -1,10 +1,14 @@
 <?php
+
+// Include config file
+require "../config.php";
+
 // Initialize the session
 session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: index1.php");
+    header("location: ..\index.php");
     exit;
 }
 ?>
@@ -39,11 +43,38 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     </aside>
     <main>
         <h1 id = "mainContent">
-            Possible Inbox System
-        </h1>
-        <p id = "subContent">
-            Here will show the incoming messages and send messages similar to an email system
-        </p>
+            Messages
+        </h1><br>
+        <input type="submit" class="button" value="Compose">
+        <div class = "hiddenLayer"><br>
+            <table>
+                <tr>
+                    <th>From</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                </tr>
+                <?php
+                    $id = $_SESSION["id"];
+                    $table = "SELECT * FROM messages WHERE player_iduser= $id";
+                    if($result = $link->query($table)){
+                        while($row = $result->fetch_assoc()){
+                            $from = $row["player_iduser1"];
+                            $subject = $row["subject"];
+                            $message = $row["message"];
+                            $date = $row["receive_date"];
+                            echo ' <tr>
+                                    <td>'.$from.'</td>
+                                    <td>'.$subject.'</td>
+                                    <td>'.$message.'</td>
+                                    <td>'.$date.'</td>
+                                </tr>';
+                        }
+                        $link->close();
+                    }
+                ?>
+            </table>
+        </div>
     </main>
     <script>
         (function() {
@@ -55,6 +86,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 e.preventDefault();
             });
         })();
+        
+        (function(){
+            var compose = document.querySelector('')
+        })
     </script>
 </body>
 </html>

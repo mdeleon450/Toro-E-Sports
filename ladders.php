@@ -29,7 +29,7 @@ session_start();
                         <?php 	// Check if the user is already logged in
 								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
-									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
+									echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
 									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 								}
 								
@@ -60,7 +60,6 @@ session_start();
 					while ($row = $result->fetch_assoc()) {
 						$ladderType = $row["ladderType"];
 						$ladderTime = $row["ladderTime"];
-						$_SESSION['ladderType'] = $ladderType;
 						echo '<br> 
 								<br>Ladder Type: <a href="ladderInfo.php">'.$ladderType.'</a></br>
 								<br>Ladder Time: '.$ladderTime.'</br> 
