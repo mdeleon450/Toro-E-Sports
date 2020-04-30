@@ -30,7 +30,7 @@ session_start();
                         <?php 	// Check if the user is already logged in
 								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
-									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
+									echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
 									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 								}
 								
@@ -50,8 +50,8 @@ session_start();
             <input type="text" placeholder="Search..">
             <button type="submit"><i class="material-icons">search</i></button>
         </div>
-		<div>
-				<table style="width:100%">
+		<div class = "hiddenLayer">
+				<table>
 				  <tr>
 					<th>Player</th>
 					<th>Wins</th>
@@ -59,7 +59,7 @@ session_start();
 				  
 				  <?php
 	
-					$table = "SELECT * FROM user";
+					$table = "SELECT * FROM user ORDER BY player_wins DESC";
 					if ($result = $link->query($table)) {
 						while ($row = $result->fetch_assoc()) {
 							$username = $row['username'];

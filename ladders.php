@@ -29,7 +29,7 @@ session_start();
                         <?php 	// Check if the user is already logged in
 								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
-									echo "<li><a href = 'signedinuser\profile.php'>Profile</a></li>";
+									echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
 									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 								}
 								
@@ -59,12 +59,21 @@ session_start();
 				if ($result = $link->query($table)) {
 					while ($row = $result->fetch_assoc()) {
 						$ladderType = $row["ladderType"];
-						$ladderTime = $row["ladderTime"];
-						$_SESSION['ladderType'] = $ladderType;
-						echo '<br> 
-								<br>Ladder Type: <a href="ladderInfo.php">'.$ladderType.'</a></br>
-								<br>Ladder Time: '.$ladderTime.'</br> 
-							</br>';
+						$ladderGame = $row["game_idgame"];
+						
+						$getGameName = "SELECT game_name, game_image FROM game WHERE idgame = $ladderGame";
+						$result1 = $link->query($getGameName);
+						$row1 = $result1->fetch_assoc();
+						$ladderGame = $row1["game_name"];
+						$gameImage = $row1["game_image"];
+						
+						echo '<div class="container">
+								<br> 
+									<br>Ladder Type: <a href="">'.$ladderType.'</a></br>
+									<br>Ladder Game: '.$ladderGame.'</br> 
+									<br><img src="images/games/'.$gameImage.'.png" alt='.$ladderGame.'></br>
+								</br>
+							</div>';
 					}
 				}
 				?>

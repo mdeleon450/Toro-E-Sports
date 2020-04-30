@@ -38,6 +38,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     <li><a href="myteam.php">My Team</a></li>
                     <li><a href="myladders.php">My Ladders</a></li>
                     <li><a href="inbox.php">Inbox</a></li>
+					<li><a href="../signout.php">Sign Out</a></li>
                 </ul>
             </div>
         </nav>
