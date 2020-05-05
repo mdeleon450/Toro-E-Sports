@@ -1,233 +1,3 @@
--- MySQL Workbench Forward Engineering
-
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
-
--- -----------------------------------------------------
--- Schema esportsladdersystem
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema esportsladdersystem
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `esportsladdersystem` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
-USE `esportsladdersystem` ;
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`game`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`game` (
-  `idgame` INT NOT NULL AUTO_INCREMENT,
-  `game_name` VARCHAR(45) NOT NULL,
-  `game_image` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idgame`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`ladder`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`ladder` (
-  `idladder` INT NOT NULL AUTO_INCREMENT,
-  `ladderType` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idladder`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 5
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`game_has_ladder`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`game_has_ladder` (
-  `idgame` INT NOT NULL,
-  `idladder` INT NOT NULL,
-  PRIMARY KEY (`idgame`, `idladder`),
-  INDEX `fk_game_has_ladder_ladder1_idx` (`idladder` ASC) VISIBLE,
-  INDEX `fk_game_has_ladder_game1_idx` (`idgame` ASC) VISIBLE,
-  CONSTRAINT `fk_game_has_ladder_game1`
-    FOREIGN KEY (`idgame`)
-    REFERENCES `esportsladdersystem`.`game` (`idgame`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_game_has_ladder_ladder1`
-    FOREIGN KEY (`idladder`)
-    REFERENCES `esportsladdersystem`.`ladder` (`idladder`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`team`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`team` (
-  `idteam` INT NOT NULL AUTO_INCREMENT,
-  `team_name` VARCHAR(45) NOT NULL,
-  `team_owner` VARCHAR(45) NOT NULL,
-  `team_type` VARCHAR(45) NOT NULL,
-  `team_matches` INT NULL DEFAULT '0',
-  `team_wins` INT NULL DEFAULT '0',
-  `team_losses` INT NULL DEFAULT '0',
-  PRIMARY KEY (`idteam`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`match`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`match` (
-  `idmatch` INT NOT NULL AUTO_INCREMENT,
-  `matchTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `matchStatus` VARCHAR(45) NOT NULL DEFAULT 'Posted',
-  `idgame` INT NOT NULL,
-  `idladder` INT NOT NULL,
-  `idteam` INT NOT NULL,
-  PRIMARY KEY (`idmatch`, `idgame`, `idladder`, `idteam`),
-  INDEX `fk_match_game_has_ladder1_idx` (`idgame` ASC, `idladder` ASC) VISIBLE,
-  INDEX `fk_match_team1_idx` (`idteam` ASC) VISIBLE,
-  CONSTRAINT `fk_match_game_has_ladder1`
-    FOREIGN KEY (`idgame` , `idladder`)
-    REFERENCES `esportsladdersystem`.`game_has_ladder` (`idgame` , `idladder`),
-  CONSTRAINT `fk_match_team1`
-    FOREIGN KEY (`idteam`)
-    REFERENCES `esportsladdersystem`.`team` (`idteam`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 11
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`user` (
-  `iduser` INT NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(50) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_wins` INT NULL DEFAULT '0',
-  `user_matches` INT NULL DEFAULT '0',
-  `user_losses` INT NULL DEFAULT '0',
-  PRIMARY KEY (`iduser`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 20
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`messages`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`messages` (
-  `from_iduser` INT NOT NULL,
-  `to_iduser` INT NOT NULL,
-  `subject` VARCHAR(255) NOT NULL,
-  `message` LONGTEXT NULL DEFAULT NULL,
-  `receive_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-  INDEX `fk_player_has_player_player2_idx` (`to_iduser` ASC) VISIBLE,
-  INDEX `fk_player_has_player_player1_idx` (`from_iduser` ASC) VISIBLE,
-  CONSTRAINT `fk_player_has_player_player1`
-    FOREIGN KEY (`from_iduser`)
-    REFERENCES `esportsladdersystem`.`user` (`iduser`),
-  CONSTRAINT `fk_player_has_player_player2`
-    FOREIGN KEY (`to_iduser`)
-    REFERENCES `esportsladdersystem`.`user` (`iduser`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`team_has_match`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`team_has_match` (
-  `idteam` INT NOT NULL,
-  `idmatch` INT NOT NULL,
-  `idgame` INT NOT NULL,
-  `idladder` INT NOT NULL,
-  `team1Score` INT NULL DEFAULT NULL,
-  `team2Score` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`idteam`, `idmatch`, `idgame`, `idladder`),
-  INDEX `fk_team_has_match_match1_idx` (`idmatch` ASC, `idgame` ASC, `idladder` ASC) VISIBLE,
-  INDEX `fk_team_has_match_team1_idx` (`idteam` ASC) VISIBLE,
-  CONSTRAINT `fk_team_has_match_match1`
-    FOREIGN KEY (`idmatch` , `idgame` , `idladder`)
-    REFERENCES `esportsladdersystem`.`match` (`idmatch` , `idgame` , `idladder`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_team_has_match_team1`
-    FOREIGN KEY (`idteam`)
-    REFERENCES `esportsladdersystem`.`team` (`idteam`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`team_in_ladder`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`team_in_ladder` (
-  `idteam` INT NOT NULL,
-  `idladder` INT NOT NULL,
-  PRIMARY KEY (`idteam`, `idladder`),
-  INDEX `fk_team_has_Ladder_Ladder1_idx` (`idladder` ASC) VISIBLE,
-  INDEX `fk_team_has_Ladder_team1_idx` (`idteam` ASC) VISIBLE,
-  CONSTRAINT `fk_team_has_Ladder_Ladder1`
-    FOREIGN KEY (`idladder`)
-    REFERENCES `esportsladdersystem`.`ladder` (`idladder`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_team_has_Ladder_team1`
-    FOREIGN KEY (`idteam`)
-    REFERENCES `esportsladdersystem`.`team` (`idteam`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
--- -----------------------------------------------------
--- Table `esportsladdersystem`.`user_has_team`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `esportsladdersystem`.`user_has_team` (
-  `iduser` INT NOT NULL,
-  `idteam` INT NOT NULL,
-  PRIMARY KEY (`iduser`, `idteam`),
-  INDEX `fk_user_has_team_team1_idx` (`idteam` ASC) VISIBLE,
-  INDEX `fk_user_has_team_user1_idx` (`iduser` ASC) VISIBLE,
-  CONSTRAINT `fk_user_has_team_team1`
-    FOREIGN KEY (`idteam`)
-    REFERENCES `esportsladdersystem`.`team` (`idteam`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_has_team_user1`
-    FOREIGN KEY (`iduser`)
-    REFERENCES `esportsladdersystem`.`user` (`iduser`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 
 INSERT INTO `esportsladdersystem`.`user` (`iduser`, `username`, `password`)
 VALUES (1, "thriftyRuffs5", "$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS");
@@ -415,6 +185,11 @@ INSERT INTO `esportsladdersystem`.`game`
 VALUES
 (4, "Rocket League", "rocketleague.png");
 
+INSERT INTO `esportsladdersystem`.`game`
+(`idgame`, `game_name`, `game_image`)
+VALUES
+(5, "Fortnite", "fortnite.png");
+
 INSERT INTO `esportsladdersystem`.`ladder`
 (`idladder`, `ladderType`)
 VALUES
@@ -489,6 +264,21 @@ INSERT INTO `esportsladdersystem`.`game_has_ladder`
 (`idgame`, `idladder`)
 VALUES
 (4, 4);
+
+INSERT INTO `esportsladdersystem`.`game_has_ladder`
+(`idgame`, `idladder`)
+VALUES
+(5, 1);
+
+INSERT INTO `esportsladdersystem`.`game_has_ladder`
+(`idgame`, `idladder`)
+VALUES
+(5, 2);
+
+INSERT INTO `esportsladdersystem`.`game_has_ladder`
+(`idgame`, `idladder`)
+VALUES
+(5, 4);
 
 INSERT INTO `esportsladdersystem`.`team_in_ladder`
 (`idteam`, `idladder`)
