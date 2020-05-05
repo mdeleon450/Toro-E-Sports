@@ -39,6 +39,8 @@ html,body{
     display: block;
 }
 ul.active{
+    animation-duration: 2s;
+    animation-name: slidein;
     position: absolute;
     display: block;
     background: #DCE1F6;
@@ -46,6 +48,14 @@ ul.active{
     left: 0;
     top: 0%;
     height: auto;
+}
+@keyframes slidein{
+    from{
+        margin-left: -100%;
+    }
+    to{
+        margin-left: 0%;
+    }
 }
 li:hover{
     background-color: #550101;
@@ -162,6 +172,33 @@ table,th,td{
     border-color: transparent;
     border-radius: 4px;
 }
+.ladder{
+    color:#fff;
+    height: 20em;
+    width: 15em;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 2em;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: inline-block;
+    position: relative;
+}
+.ladderText{
+    position: relative;
+    display:block;
+    height: 30%;
+    width: 90%;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.5);
+}
+.headers{
+    font-size: 1.5em;
+    color: #fff;
+    background-color: #860038;
+}
+
 @media only screen and (min-width: 1340px){
 html,body{
     height: 100%;
@@ -185,6 +222,7 @@ html,body{
     display:inline;
     float: left;
     padding-left: 15px;
+    padding-right: 10px;
     padding-top: 1em;
     width: 240px;
     cursor: pointer;
@@ -312,5 +350,31 @@ table,th,td{
     padding: .5em 1.5em;
     border-color: transparent;
     border-radius: 4px;
+}
+.ladder{
+    color:#fff;
+    height: 20em;
+    width: 15em;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 2em;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: inline-block;
+    position: relative;
+}
+.ladderText{
+    position: relative;
+    display:block;
+    height: 30%;
+    width: 90%;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.5);
+}
+.headers{
+    font-size: 1.5em;
+    color: #fff;
+    background-color: #860038;
 }
 }

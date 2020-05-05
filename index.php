@@ -25,16 +25,34 @@ session_start();
                     <li><a class="active" href = "index.php">Home</a></li>
                         <li><a href = "ladders.php">Ladders</a></li>
                         <li><a href = "leaderboards.php">Leaderboards</a></li>
-                        <?php 	// Check if the user is already logged in
-								if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-									echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
-									echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
-									echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+                        <?php 	
+                            // Check if the user is already logged in
+							if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+							$username = $_SESSION["username"];
+			
+            			    $table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
+							if ($result = $link->query($table)) {
+								while ($row = $result->fetch_assoc()) {
+									$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
+									$row = mysqli_fetch_assoc($currentUser);
+									$iduser = $row['iduser'];
+									if ($row['iduser'] == $iduser){
+										echo "<li><a href = 'teams.php'>Teams</a></li>";
+										echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
+										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+									}
+									else {
+										echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
+										echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
+										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+									}
 								}
-								
-								else {
-									echo "<li><a href = 'teams.php'>Teams</a></li>";
-									echo "<li><a href = 'signin.php'>Sign In</a></li>";}
+							}
+							}
+							else {
+							    echo "<li><a href = 'teams.php'>Teams</a></li>";
+								echo "<li><a href = 'signin.php'>Sign In</a></li>";
+							}
 						?>
                 </ul>
             </div>
@@ -44,33 +62,55 @@ session_start();
     
 	<div class = "content">
         <div class = "searchbar">
-            <input type="text" placeholder="Search..">
-            <button type="submit"><i class="material-icons">search</i></button>
+            <form method = "POST">
+                <input name = "search" type="text" placeholder="Search..">
+                <button name = "searchBtn" type="submit"><i class="material-icons">search</i></button>
+            </form>
         </div>
         <h1 id = "mainContent">News</h1>
         <div class = "subContainer">
 				<?php
-	
-				$table = "SELECT * FROM news";
-				if ($result = $link->query($table)) {
-					while ($row = $result->fetch_assoc()) {
-					    echo '<div class = "entry">';
-						$title = $row["title"];
-						$author = $row["author"];
-						$date = $row["date"];
-						$contents = $row["contents"];
-						echo '<p id = "subContent"> 
-								<h2>Title: '.$title.' </h2> 
-								<h4>Date: '.$date.'	</h4> 
-								&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'.$contents.'<br> 
-								<br>Author: <a href = "">'.$author.'</a></br><br> 
-							 </p>
-							 </div>';
+	                if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
+	                    $sterm = '%'.$_POST['search'].'%';
+	                    $table = "SELECT * FROM news WHERE (title LIKE '$sterm') OR (author LIKE '$sterm') OR (contents LIKE '$sterm') OR (date LIKE '$sterm')";
+	                    if ($result = $link->query($table)) {
+					        while ($row = $result->fetch_assoc()) {
+					            echo '<div class = "entry">';
+					    	            $title = $row["title"];
+						                $author = $row["author"];
+						                $date = $row["date"];
+						                $contents = $row["contents"];
+            						    echo '<p id = "subContent"> 
+			            					    <h2>Title: '.$title.' </h2> 
+						            		    <h4>Date: '.$date.'	</h4> 
+								                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'.$contents.'<br> 
+								                <br>Author: <a href = "">'.$author.'</a></br><br> 
+							                   </p>
+							           </div>';
+					            }
+	                    }
+	                }
+	                else{
+				        $table = "SELECT * FROM news";
+				        if ($result = $link->query($table)) {
+					        while ($row = $result->fetch_assoc()) {
+					            echo '<div class = "entry">';
+					    	            $title = $row["title"];
+						                $author = $row["author"];
+						                $date = $row["date"];
+						                $contents = $row["contents"];
+            						    echo '<p id = "subContent"> 
+			            					    <h2>Title: '.$title.' </h2> 
+						            		    <h4>Date: '.$date.'	</h4> 
+								                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'.$contents.'<br> 
+								                <br>Author: <a href = "">'.$author.'</a></br><br> 
+							                   </p>
+							           </div>';
+					        }
+				        }
 					}
 					
 				$link->close();
-				
-				}
 				?>
 		</div>
     </div>

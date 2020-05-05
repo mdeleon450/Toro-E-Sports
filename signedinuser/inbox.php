@@ -23,10 +23,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 </head>
 <body>
     <aside>
-        <figure>
-            <div id = "avatar"></div>
-            <img class = "toro" src = "images/toro.jpeg">
-            <figcaption><?php echo $_SESSION["username"]?></figcaption>
+         <figure>
+            <div id = "avatar" >
+                <img class = "toro" src = "images/toro.jpeg">
+                <figcaption><?php echo $_SESSION["username"]?></figcaption>
+            </div>
         </figure>
         <img class = "imenu" src = "images/menu.svg">
         <nav>
@@ -37,7 +38,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     <li><a href="myteam.php">My Team</a></li>
                     <li><a href="myladders.php">My Ladders</a></li>
                     <li><a href="inbox.php">Inbox</a></li>
-					<li><a href="../signout.php">Sign Out</a></li>
+                    <li><a href="../signout.php">Sign Out</a></li>
                 </ul>
             </div>
         </nav>
@@ -49,7 +50,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <a href="#" style="text-decoration: none;" class="button" id="button">Compose</a>
         <div class = "hiddenLayer"><br>
             <table>
-                <tr>
+                <tr class = "headers">
                     <th>From</th>
                     <th>Subject</th>
                     <th>Message</th>
@@ -57,7 +58,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 </tr>
                 <?php
                     $id = $_SESSION["id"];
-                    $table = "SELECT * FROM messages WHERE to_iduser1= $id ORDER BY receive_date DESC";
+                    $table = "SELECT * FROM messages WHERE to_iduser = $id ORDER BY receive_date DESC";
                     if($result = $link->query($table)){
                         while($row = $result->fetch_assoc()){
 							$fromID = $row["from_iduser"];
@@ -90,7 +91,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                         </form>
                 </div>
             </div>
-			<?php 
+            <?php 
 			// Define variables
 			$currentUserID = $_SESSION["id"];
 			$receiver = $subject = $message = "";
@@ -129,7 +130,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 				// Validate 
 				if(empty($receiver_err) && empty($subject_err) && empty($message_err)){
 					// Prepare an insert statement
-					$sql = "INSERT INTO messages (from_iduser, to_iduser1, subject, message) VALUES (?, ?, ?, ?)";
+					$sql = "INSERT INTO messages (from_iduser, to_iduser, subject, message) VALUES (?, ?, ?, ?)";
 					 
 					if($stmt = mysqli_prepare($link, $sql)){
 						// Bind variables to the prepared statement as parameters

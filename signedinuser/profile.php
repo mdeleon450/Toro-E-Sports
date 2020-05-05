@@ -1,7 +1,7 @@
 <?php
 
 // Include config file
-require_once "..\config.php";
+require "../config.php";
 
 // Initialize the session
 session_start();
@@ -24,9 +24,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <body>
     <aside>
         <figure>
-            <div id = "avatar" ></div>
-			<img src = "images/toro.jpeg">
-            <figcaption><?php echo $_SESSION["username"]?></figcaption>
+             <figure>
+            <div id = "avatar" >
+                <img class = "toro" src = "images/toro.jpeg">
+                <figcaption><?php echo $_SESSION["username"]?></figcaption>
+            </div>
+        </figure>
         </figure>
         <img class = "imenu" src = "images/menu.svg">
         
@@ -38,7 +41,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     <li><a href="myteam.php">My Team</a></li>
                     <li><a href="myladders.php">My Ladders</a></li>
                     <li><a href="inbox.php">Inbox</a></li>
-					<li><a href="../signout.php">Sign Out</a></li>
+                    <li><a href="../signout.php">Sign Out</a></li>
                 </ul>
             </div>
         </nav>
@@ -65,8 +68,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 			$result = mysqli_query($link, "SELECT * FROM user WHERE username = '$username' LIMIT 1");
 			$row = mysqli_fetch_assoc($result);
 			echo 
-					'<br>Wins: '.$row['player_wins'].' </br> 
-					<br>Matches: '.$row['player_matches'].' </br>';
+					'<br>Wins: '.$row['user_wins'].' </br> 
+					<br>Matches: '.$row['user_matches'].' </br>';
 				
 				
 			$link->close();
@@ -76,7 +79,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <script>
         (function() {
             var menu = document.querySelector('ul'),
-            menulink = document.querySelector('img');
+            menulink = document.querySelector('.imenu');
 
             menulink.addEventListener('click',function(e) {
                 menu.classList.toggle('active');

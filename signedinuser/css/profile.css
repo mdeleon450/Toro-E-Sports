@@ -21,11 +21,21 @@ aside{
 .imenu{
     display: block;
 }
+@keyframes slidein{
+    from{
+        margin-left: -100%;
+    }
+    to{
+        margin-left: 0%;
+    }
+}
 img{
     width: 40px;
     cursor: pointer;
 }
-
+.toro{
+    border-radius: 10px;
+}
 figure{
   display: block;
   margin-top: 1em;
@@ -41,6 +51,8 @@ figcaption{
 }
 
 .active{
+    animation-duration: 2s;
+    animation-name: slidein;
     position: absolute;
     display: block;
     background: #fff;
@@ -134,6 +146,77 @@ table,th,td{
     border-color: transparent;
     border-radius: 4px;
 }
+.popup{
+        display: none;
+        background: rgba(0,0,0,0.2);
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
+        bottom: 0;
+        right: 30px;
+    }
+    .popup-content{
+        padding-top: 1em;
+        padding-left: 1em;
+        height: 90%;
+        width: 90%;
+        background: #fff;
+        border-radius: 5px;
+        position: relative;
+    }
+    .close{
+       position: absolute;
+       top: -5%;
+       right: -5%;
+       background: #fff;
+       height: 20px;
+       width: 20px;
+       border-radius: 50%;
+       cursor: pointer;
+    }
+    .sendinfo{
+        font-size: 1.5em;
+        width: 90%;
+        border: 0;
+    }
+    .msgContents{
+        font-size: 1.5em;
+        width: 90%;
+        height: 100% !important;
+        overflow:auto;
+        outline: none;
+        resize: none;
+    }
+    .headers{
+    font-size: 1.5em;
+    color: #fff;
+    background-color: #860038;
+    }
+    .ladder{
+        color:#fff;
+        height: 20em;
+        width: 15em;
+        margin: 1em;
+        padding: 1em;
+        border-radius: 2em;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        display: inline-block;
+        position: relative;
+    }
+    .ladderText{
+        position: relative;
+        display:block;
+        height: 30%;
+        width: 90%;
+        border-radius: 5px;
+        background: rgba(0,0,0,0.5);
+    }
+
 @media only screen and (min-width: 768px){
     body{
         display: grid;
@@ -141,7 +224,7 @@ table,th,td{
         padding: 2em;
     }
     
-    img,.imenu{
+    .imenu{
         display: none;
     }
 
@@ -155,6 +238,7 @@ table,th,td{
     main{
         padding: 4em;
         height: calc(100% - 8em) ;
+        position: relative;
         background: white no-repeat bottom right;
         background-size: 70%;
     }
@@ -167,7 +251,11 @@ table,th,td{
         height: 50px;
         margin: 2em auto 1em auto;
     }
-
+    .toro{
+        height:50px;
+        width:50px;
+        border-radius: 50%;
+    }
     figcaption{
         text-align: center;
         color: #000;
@@ -224,5 +312,74 @@ table,th,td{
         padding: .5em 1.5em;
         border-color: transparent;
         border-radius: 4px;
+    }
+    .popup{
+        display: none;
+        background: rgba(0,0,0,0.2);
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
+        bottom: 0;
+        right: 30px;
+    }
+    .popup-content{
+        padding-top: 1em;
+        padding-left: 1em;
+        height: 90%;
+        width: 90%;
+        background: #fff;
+        border-radius: 5px;
+        position: relative;
+    }
+    .close{
+       position: absolute;
+       top: -5%;
+       right: -5%;
+       background: #fff;
+       height: 20px;
+       width: 20px;
+       border-radius: 50%;
+       cursor: pointer;
+    }
+    .sendinfo{
+        font-size: 1.5em;
+        border: 0;
+    }
+    .msgContents{
+        font-size: 1.5em;
+        line-height: 100%;
+        overflow:auto;
+        outline: none;
+
+        resize: none;
+    }
+    .headers{
+        font-size: 1.5em;
+        color: #fff;
+        background-color: #860038;
+    }
+    .ladder{
+        color:#fff;
+        height: 20em;
+        width: 15em;
+        margin: 1em;
+        padding: 1em;
+        border-radius: 2em;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        display: inline-block;
+        position: relative;
+    }
+    .ladderText{
+        position: relative;
+        display:block;
+        height: 30%;
+        width: 90%;
+        border-radius: 5px;
+        background: rgba(0,0,0,0.5);
     }
 }

@@ -93,7 +93,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				<textarea rows="20" cols="100" type="text" name="contents" ></textarea><br>
 				
 				<div class = "form">
-					<input type="submit" class="button" value="Submit"
+					<input type="submit" class="button" value="Submit">
 				</div>
             </form>
         </div>

@@ -1,14 +1,14 @@
 <?php
 
 // Include config file
-require_once "..\config.php";
+require_once "../config.php";
 
 // Initialize the session
 session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: index1.php");
+    header("location: ..\index.php");
     exit;
 }
 ?>
@@ -23,12 +23,13 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 </head>
 <body>
     <aside>
-        <figure>
-            <div id = "avatar"></div>
-            <figcaption><?php echo $_SESSION["username"]?></figcaption>
+          <figure>
+            <div id = "avatar" >
+                <img class = "toro" src = "images/toro.jpeg">
+                <figcaption><?php echo $_SESSION["username"]?></figcaption>
+            </div>
         </figure>
         <img class = "imenu" src = "images/menu.svg">
-        <img src = "images/toro.jpeg">
         <nav>
             <div id="mtabs">
                 <ul>
@@ -37,7 +38,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     <li><a href="myteam.php">My Team</a></li>
                     <li><a href="myladders.php">My Ladders</a></li>
                     <li><a href="inbox.php">Inbox</a></li>
-					<li><a href="../signout.php">Sign Out</a></li>
+                    <li><a href="../signout.php">Sign Out</a></li>
                 </ul>
             </div>
         </nav>
@@ -46,35 +47,51 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <h1 id = "mainContent">
             My Team
         </h1>
-        <p id = "subContent">
+        <table>
+			        <tr class = "headers">
+			            <th>Members</th>
+			        </tr>
 			<?php
 			$username = $_SESSION["username"];
 			
-			$result = mysqli_query($link, "SELECT team_idteam FROM user WHERE username = '$username'");
-			$row = mysqli_fetch_assoc($result);
-			$teamid = $row['team_idteam'];
-			
-			if ($teamid == null){
-				echo 'Not registered in a team, please find a team <a href="..\loggedteams.php">here</a>.';
-			}
-			
-			else {
-			
-				$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid'");
-				$row = mysqli_fetch_assoc($result);
-				echo '' . $row['team_name'];
-				
-				echo "<br><a id=\"teamdisband\" title=\"Disband Team\"
-						href=\"#\" onclick=\"disbandTeam();return false;\">Disband Team</a>";
-				
+			$table = "SELECT iduser, idteam FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
+			if ($result = $link->query($table)) {
+				while ($rowUserHasTeam = $result->fetch_assoc()) {
+					$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
+					$row = mysqli_fetch_assoc($currentUser);
+					$iduser = $row['iduser'];
+					if ($rowUserHasTeam['iduser'] == $iduser){
+						$teamid = $rowUserHasTeam['idteam'];
+						$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid'");
+						$rowTeamName = mysqli_fetch_assoc($result);
+						echo '<h1 align = "center"><a href = "">' . $rowTeamName['team_name'] . '</a></h1>';
+						$teamTable = "SELECT iduser, idteam FROM user_has_team WHERE idteam = $teamid"; 
+						if ($resultTeam = $link->query($teamTable)) {
+							while ($rowTeamMember = $resultTeam->fetch_assoc()) {
+									$teamMember = $rowTeamMember['iduser'];
+									$currentTeamMember = mysqli_query($link, "SELECT username FROM user WHERE iduser = $teamMember");
+									$rowTeamMember = mysqli_fetch_assoc($currentTeamMember);
+									$teamMemberName = $rowTeamMember['username'];
+									echo '<tr> 
+										<td><a href = "">'.$teamMemberName.'</a></td> 
+									</tr>';
+							}
+						}
+						echo "<br><a id=\"teamdisband\" title=\"Disband Team\"
+								href=\"#\" onclick=\"disbandTeam();return false;\">Disband Team</a>";
+					}
+					else {
+						echo 'Not registered in a team, please find a team <a href="..\loggedteams.php" style= "text-decoration: none; color: black; font-weight: bold;">here</a>.';
+					}
+				}
 			}
 			?>
-        </p>
+        </table>
     </main>
     <script>
         (function() {
             var menu = document.querySelector('ul'),
-            menulink = document.querySelector('img');
+            menulink = document.querySelector('.imenu');
 
             menulink.addEventListener('click',function(e) {
                 menu.classList.toggle('active');
