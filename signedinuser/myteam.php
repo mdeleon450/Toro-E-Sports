@@ -64,7 +64,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 						$teamid = $rowUserHasTeam['idteam'];
 						$result = mysqli_query($link, "SELECT team_name FROM team WHERE idteam = '$teamid'");
 						$rowTeamName = mysqli_fetch_assoc($result);
-						echo '<h1 align = "center"><a href = "">' . $rowTeamName['team_name'] . '</a></h1>';
+						echo '<div style = "margin-top: .8em; margin-bottom: .5em; font-size: 2.4em; font-weight: bold;"><a href = "">' . $rowTeamName['team_name'] . '</a></div>';
 						$teamTable = "SELECT iduser, idteam FROM user_has_team WHERE idteam = $teamid"; 
 						if ($resultTeam = $link->query($teamTable)) {
 							while ($rowTeamMember = $resultTeam->fetch_assoc()) {
@@ -77,8 +77,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 									</tr>';
 							}
 						}
-						echo "<br><a id=\"teamdisband\" title=\"Disband Team\"
-								href=\"#\" onclick=\"disbandTeam();return false;\">Disband Team</a>";
+						echo "<div style = \"font-size: 1.5em;\"><a id=\"teamdisband\" title=\"Disband Team\"
+								href=\"#\" onclick=\"disbandTeam();return false;\">Disband Team</a></div><br>";
 					}
 					else {
 						echo 'Not registered in a team, please find a team <a href="..\loggedteams.php" style= "text-decoration: none; color: black; font-weight: bold;">here</a>.';

@@ -53,24 +53,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $teamtype = trim($_POST["teamtype"]);
     }
 	
+	// Validate team game
+    if(empty(trim($_POST["idgame"]))){
+        $teamgame_err = "Please select a game.";  
+		echo $teamgame_err;
+    } else{
+        $teamgame = (int)trim($_POST["idgame"]);
+    }
+	
 	$username = trim($_SESSION["username"]);
 	
     // Check input errors before inserting in database
-    if(empty($teamname_err) && empty($teamtype_err)){
+    if(empty($teamname_err) && empty($teamtype_err) && empty($teamgame_err)){
         
         // Prepare an insert statement for team creation
-        $sql = "INSERT INTO team (team_name, team_owner, team_type) VALUES (?, ? , ?)";
+        $sql = "INSERT INTO team (team_name, team_owner, team_type, idgame) VALUES (?, ? , ?, ?)";
 		
          
         if($stmt = mysqli_prepare($link, $sql)){
 			
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_teamname, $param_username, $param_teamtype);
+            mysqli_stmt_bind_param($stmt, "sssi", $param_teamname, $param_username, $param_teamtype, $param_teamgame);
             
             // Set parameters
             $param_teamname = $teamname;
-            $param_teamtype = $teamtype;
 			$param_username = $username;
+			$param_teamtype = $teamtype;
+			$param_teamgame = $teamgame;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -87,17 +96,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				$iduser = (int)$row['iduser'];
 					
 				// Prepare an update statement for the user's information
-				$updateuser = "UPDATE user SET team_idteam = ? WHERE iduser = ?";
+				$updateuser = "INSERT INTO user_has_team (iduser, idteam) VALUES (?, ?)";
 					
 					 
 				if($stmt = mysqli_prepare($link, $updateuser)){
 
 					// Bind variables to the prepared statement as parameters
-					mysqli_stmt_bind_param($stmt, "is", $param_idteam, $param_iduser);
+					mysqli_stmt_bind_param($stmt, "ii", $param_iduser, $param_idteam);
 						
 					// Set parameters
-					$param_idteam = $idteam;
 					$param_iduser = $iduser;
+					$param_idteam = $idteam;
 						
 					if(mysqli_stmt_execute($stmt)){
 						// Redirect to login page
@@ -155,18 +164,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <?php 	
                             // Check if the user is already logged in
 							if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-							$username = $_SESSION["username"];
-			
-            			    $table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
-							if ($result = $link->query($table)) {
-								while ($row = $result->fetch_assoc()) {
-									$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
-									$row = mysqli_fetch_assoc($currentUser);
-									$iduser = $row['iduser'];
-									if ($row['iduser'] == $iduser){
-										echo "<li><a href = 'teams.php'>Teams</a></li>";
-										echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
-										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+								$username = $_SESSION["username"];
+								$table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
+								if ($result = $link->query($table)) {
+									
+									if ($row = $result->fetch_assoc()) {
+										
+										$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
+										$row = mysqli_fetch_assoc($currentUser);
+										$iduser = $row['iduser'];
+										if ($row['iduser'] == $iduser){
+											echo "<li><a href = 'teams.php'>Teams</a></li>";
+											echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
+											echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+										}
 									}
 									else {
 										echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
@@ -174,7 +185,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 									}
 								}
-							}
+								else {
+									echo "Error with database.";
+								}
 							}
 							else {
 							    echo "<li><a href = 'teams.php'>Teams</a></li>";
@@ -195,28 +208,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <button name = "searchBtn" type="submit"><i class="material-icons">search</i></button>
             </form>
         </div>
-		<h1 id="mainContent">Teams</h1>
+		<br><br><br><br><h1 id="mainContent" align = "center">Teams</h1>
 			<div class = "subContent" align = "center">
 			    
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" >
                     <div class="form">
-                        <label>Team Name </label><br>
+                        <label>Team Name </label>
                         <input type="text" name="teamname" required >
 					</div>
 					
-					<div class="form">
-						<input type="radio" name="teamtype" value="Single Team" required>
-						<label>Single Team</label>
-					</div>
-					
-					<div class="form">
-                        <input type="radio" name="teamtype" value="Double Team" required>
-						<label>Double Team</label>
-					</div>
-					
-					<div class="form">
-                        <input type="radio" name="teamtype" value="Quad Team" required>
+					<div class="form" >
+						<input type="radio" name="teamtype" value="Single Ladder" required>
+						<label>Single Team</label alig><br>
+                        <input type="radio" name="teamtype" value="Double Ladder" required>
+						<label>Double Team</label><br>
+                        <input type="radio" name="teamtype" value="Quad Ladder" required>
+						<label>Trio Team</label><br>
+                        <input type="radio" name="teamtype" value="Quad Ladder" required>
 						<label>Quad Team</label>
+					</div>
+					
+					<div class="form">
+					<label for="game">Choose a game:</label>
+                        <select name = "idgame" required>
+						  <option disabled selected value> -- select an option -- </option>
+						  <option value="1">FIFA 20</option>
+						  <option value="2">Super Smash Bros. Ultimate</option>
+						  <option value="3">Call of Duty: Warzone</option>
+						  <option value="4">Rocket League</option>
+						  <option value="5">Fortnite</option>
+						</select>
 					</div>
 					
 					<br>

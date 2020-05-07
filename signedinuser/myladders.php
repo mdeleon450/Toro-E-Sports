@@ -48,13 +48,25 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             My Ladders
         </h1>
                 <?php
-                    $userid = $_SESSION["id"];
-                    $table = "SELECT ladderType, game_name, game_image FROM game JOIN game_has_ladder USING (idgame) JOIN ladder USING (idladder) JOIN team_in_ladder USING (idladder) JOIN team USING (idteam) JOIN user_has_team USING (idteam) JOIN user USING (iduser) WHERE (iduser = '$userid')";
+                    $username = $_SESSION["username"];
+                    $table = "select team_in_ladder.idteam, team_in_ladder.idladder, team_in_ladder.idgame 
+										from team_in_ladder 
+										join team using (idteam) 
+										join user_has_team using (idteam) 
+										join user using (iduser) 
+										where iduser = (select iduser from user where username = '$username')";
                     if ($result = $link->query($table)){
                         while ($row = $result->fetch_assoc()) {
-					        	$ladderType = $row["ladderType"];
-					            $ladderGame = $row["game_name"];
-        						$gameImage = $row["game_image"];
+								
+								$currentLadder = mysqli_query($link, "SELECT ladderType FROM ladder WHERE idladder = ".$row["idladder"]."");
+								$rowLadder = mysqli_fetch_assoc($currentLadder);
+					        	$ladderType = $rowLadder["ladderType"];
+								
+								$currentGame = mysqli_query($link, "SELECT game_name, game_image FROM game WHERE idgame = ".$row["idgame"]."");
+								$rowGame= mysqli_fetch_assoc($currentGame);
+					            $ladderGame = $rowGame["game_name"];
+								
+        						$gameImage = $rowGame["game_image"];
 	        					$imageLocation = '../images/games/'.$gameImage;
 		        				echo '<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
 		        						<div class = "ladderText" style= "position: absolute; bottom: 5%;">

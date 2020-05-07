@@ -30,18 +30,20 @@ session_start();
                         <?php 	
                             // Check if the user is already logged in
 							if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-							$username = $_SESSION["username"];
-			
-            			    $table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
-							if ($result = $link->query($table)) {
-								while ($row = $result->fetch_assoc()) {
-									$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
-									$row = mysqli_fetch_assoc($currentUser);
-									$iduser = $row['iduser'];
-									if ($row['iduser'] == $iduser){
-										echo "<li><a href = 'teams.php'>Teams</a></li>";
-										echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
-										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+								$username = $_SESSION["username"];
+								$table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
+								if ($result = $link->query($table)) {
+									
+									if ($row = $result->fetch_assoc()) {
+										
+										$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
+										$row = mysqli_fetch_assoc($currentUser);
+										$iduser = $row['iduser'];
+										if ($row['iduser'] == $iduser){
+											echo "<li><a href = 'teams.php'>Teams</a></li>";
+											echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
+											echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+										}
 									}
 									else {
 										echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
@@ -49,7 +51,9 @@ session_start();
 										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 									}
 								}
-							}
+								else {
+									echo "Error with database.";
+								}
 							}
 							else {
 							    echo "<li><a href = 'teams.php'>Teams</a></li>";
@@ -69,17 +73,73 @@ session_start();
                 <input name = "search" type="text" placeholder="Search..">
                 <button name = "searchBtn" type="submit"><i class="material-icons">search</i></button>
             </form>
-        </div>
-        <h1 id = "mainContent">Leaderboards</h1>
-		<div class = "hiddenLayer">
-				<table style>
-				  <tr class = "headers">
-					<th>Player</th>
-					<th>Wins</th>
-					<th>Matches</th>
-				  
+        </div>	  
 				  <?php
-	                if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
+				    if(isset($_GET['player']) && isset($_GET['team'])){
+						$teamName = $_GET['team'];
+				        echo '<br><br><br><br><br><div><h1 align = "center">'.$teamName.'\'s Owner</h1></div>';
+						echo '<div class = "hiddenLayer">
+								<table style>
+									<tr class = "headers">
+										<th>Player</th>
+										<th>Wins</th>
+										<th>Matches</th>';
+				        $sterm = $_GET['player'];
+				        
+				        $table = "SELECT * FROM user WHERE (username LIKE '$sterm') ORDER BY user_wins DESC";
+	                    if ($result = $link->query($table)) {
+						    while ($row = $result->fetch_assoc()) {
+							    $username = $row['username'];
+							    $playerwins = $row['user_wins'];
+							    $playermatches = $row['user_matches'];
+							
+						    	echo '<tr align = "center"> 
+							    		<td><a href = "">'.$username.'<a/></td>
+								    	<td>'.$playerwins.'</td> 
+								    	<td>'.$playermatches.'</td> 
+								    </tr>';
+					    	}
+						
+					    $link->close();
+					
+					    }
+				    }
+				    else if(isset($_GET['team'])){
+						$teamName = $_GET['team'];
+				        echo '<br><br><br><br><br><div><h1 align = "center">'.$teamName.'</h1><h3 align = "center">Members</h3></div>';
+						echo ' <div class = "hiddenLayer">
+									<table style>
+										<tr class = "headers">
+											<th>Player</th>
+											<th>Wins</th>
+											<th>Matches</th>';
+				       
+				        $table = "SELECT username, user_wins, user_matches FROM user JOIN user_has_team USING (iduser) JOIN team USING (idteam) WHERE team_name = '$teamName'";
+				        if ($result = $link->query($table)) {
+						    while ($row = $result->fetch_assoc()) {
+							    $username = $row['username'];
+							    $playerwins = $row['user_wins'];
+							    $playermatches = $row['user_matches'];
+							
+						    	echo '<tr align = "center"> 
+							    		<td><a href = "">'.$username.'<a/></td>
+								    	<td>'.$playerwins.'</td> 
+								    	<td>'.$playermatches.'</td> 
+								    </tr>';
+					    	}
+						
+					    $link->close();
+					
+					    }
+				    }
+	                else if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
+						echo '<br><br><br><br><h1 id = "mainContent" align = "center">Leaderboards</h1>
+								<div class = "hiddenLayer">
+									<table style>
+										<tr class = "headers">
+											<th>Player</th>
+											<th>Wins</th>
+											<th>Matches</th>';
 	                    $sterm = '%'.$_POST['search'].'%';
 	                    $table = "SELECT * FROM user WHERE (username LIKE '$sterm') ORDER BY user_wins DESC";
 	                    if ($result = $link->query($table)) {
@@ -100,6 +160,13 @@ session_start();
 					    }
 	                }
 	                else{
+						echo '<br><br><br><br><h1 id = "mainContent" align = "center" >Leaderboards</h1>
+								<div class = "hiddenLayer">
+									<table style>
+										<tr class = "headers">
+											<th>Player</th>
+											<th>Wins</th>
+											<th>Matches</th>';
 	                    $table = "SELECT * FROM user ORDER BY user_wins DESC";
 					    if ($result = $link->query($table)) {
 						    while ($row = $result->fetch_assoc()) {

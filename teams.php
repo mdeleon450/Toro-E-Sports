@@ -5,162 +5,6 @@ require_once "config.php";
 
 // Initialize the session
 session_start();
- 
- 
-// Form that was submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate team name
-    if(empty(trim($_POST["teamname"]))){
-        $teamname_err = "Please enter a team name.";
-    } else{
-        // Prepare a select statement
-        $sql = "SELECT idteam FROM team WHERE team_name = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_teamname);
-            
-            // Set parameters
-            $param_teamname = trim($_POST["teamname"]);
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                /* store result */
-                mysqli_stmt_store_result($stmt);
-                
-                if(mysqli_stmt_num_rows($stmt) == 1){
-                    $teamname_err = "This team name is already taken.";
-					echo $teamname_err;
-                } else{
-                    $teamname = trim($_POST["teamname"]);
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
-        }
-    }
-	
-	// Validate team type
-    if(empty(trim($_POST["teamtype"]))){
-        $teamtype_err = "Please select a team type.";  
-		echo $teamtype_err;
-    } else{
-        $teamtype = trim($_POST["teamtype"]);
-    }
-	
-	$username = trim($_SESSION["username"]);
-	
-    // Check input errors before inserting in database
-    if(empty($teamname_err) && empty($teamtype_err)){
-        
-        // Prepare an insert statement for team creation
-        $sql = "INSERT INTO team (team_name, team_owner, team_type) VALUES (?, ? , ?)";
-		
-         
-        if($stmt = mysqli_prepare($link, $sql)){
-			
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_teamname, $param_username, $param_teamtype);
-            
-            // Set parameters
-            $param_teamname = $teamname;
-            $param_teamtype = $teamtype;
-			$param_username = $username;
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-				
-				// Get the team id
-				$result = mysqli_query($link, "SELECT idteam FROM team WHERE team_owner = '$username' LIMIT 1");
-				$row = mysqli_fetch_assoc($result);
-				$idteam = (int)$row['idteam'];
-				
-				
-				// Assign team to user
-				
-				// Prepare an update statement for team in a ladder
-				$sql = "INSERT INTO team_in_ladder (team_idteam, ladder_idladder) VALUES (?, ?)";
-				
-				
-				if($stmt = mysqli_prepare($link, $sql)){
-					
-					// Bind variables to the prepared statement as parameters
-					mysqli_stmt_bind_param($stmt, "ii", $param_team_idteam, $param_ladder_idladder);
-					
-					// Set parameters
-					$param_team_idteam = $idteam;
-					
-					// Check what type the team is and assign the corrent ladder
-					if (strcasecmp($teamtype, "Single Team")== 0)
-						$param_ladder_idladder = 1;
-					else $param_ladder_idladder = 2;
-					
-					
-					// Attempt to execute the prepared statement
-					if(mysqli_stmt_execute($stmt)){
-						
-						
-						// Get the user id
-						$result = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username' LIMIT 1");
-						$row = mysqli_fetch_assoc($result);
-						$iduser = (int)$row['iduser'];
-						
-						// Prepare an update statement for the user's information
-						$updateuser = "UPDATE user SET team_idteam = ? WHERE iduser = ?";
-						
-						 
-						if($stmt = mysqli_prepare($link, $updateuser)){
-
-							// Bind variables to the prepared statement as parameters
-							mysqli_stmt_bind_param($stmt, "is", $param_idteam, $param_iduser);
-							
-							// Set parameters
-							$param_idteam = $idteam;
-							$param_iduser = $iduser;
-							
-							if(mysqli_stmt_execute($stmt)){
-								 // Redirect to login page
-								header("location: signedinuser/myteam.php");
-							}
-							
-							else {
-								echo "Something went wrong. Please try again later.";
-							}
-							
-						// Close statement
-						mysqli_stmt_close($stmt);
-						} 
-						else {
-							echo "Something went wrong. Please try again later.";
-						}
-					}
-					else {
-						echo "Something went wrong. Please try again later.";
-					}
-					
-				// Close statement
-				mysqli_stmt_close($stmt);
-				} 
-				else {
-					echo "Something went wrong. Please try again later.";
-				}
-            } 
-			else {
-                echo "Something went wrong. Please try again later.";
-            }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
-        }
-		else {
-                echo "Something went wrong. Please try again later.";
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -185,18 +29,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <?php 	
                             // Check if the user is already logged in
 							if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-							$username = $_SESSION["username"];
-			
-            			    $table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
-							if ($result = $link->query($table)) {
-								while ($row = $result->fetch_assoc()) {
-									$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
-									$row = mysqli_fetch_assoc($currentUser);
-									$iduser = $row['iduser'];
-									if ($row['iduser'] == $iduser){
-										echo "<li><a href = 'teams.php'>Teams</a></li>";
-										echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
-										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+								$username = $_SESSION["username"];
+								$table = "SELECT iduser FROM user_has_team WHERE iduser = (SELECT iduser FROM user WHERE username = '$username')"; 
+								if ($result = $link->query($table)) {
+									
+									if ($row = $result->fetch_assoc()) {
+										
+										$currentUser = mysqli_query($link, "SELECT iduser FROM user WHERE username = '$username'");
+										$row = mysqli_fetch_assoc($currentUser);
+										$iduser = $row['iduser'];
+										if ($row['iduser'] == $iduser){
+											echo "<li><a href = 'teams.php'>Teams</a></li>";
+											echo "<li><a href = 'signedinuser/profile.php'>Profile</a></li>";
+											echo "<li><a href = 'signout.php'>Sign Out</a></li>";
+										}
 									}
 									else {
 										echo "<li><a href = 'loggedteams.php'>Teams</a></li>";
@@ -204,7 +50,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 										echo "<li><a href = 'signout.php'>Sign Out</a></li>";
 									}
 								}
-							}
+								else {
+									echo "Error with database.";
+								}
 							}
 							else {
 							    echo "<li><a href = 'teams.php'>Teams</a></li>";
@@ -226,20 +74,97 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </form>
         </div>
 		
-		<div>
-		<h1 id="mainContent">Teams</h1>
-			<div class = "hiddenLayer">
-			    <table>
-			        <tr class = "headers">
-			            <th>Team Name</th>
-			            <th>Team Owner</th>
-			            <th>Team Type</th>
-			            <th>Team Wins</th>
-						<th>Team Losses</th>
-			            <th>Team Matches</th>
-			        </tr>
+		<div>       
 				<?php
-				if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
+				if(isset($_GET['type']) && isset($_GET['game'])){
+					$ladderType = $_GET['type'];
+				    $ladderGame = $_GET['game'];
+					echo '<br><br><br><br><h1 id = "mainContent" align = "center">Teams playing in '.$ladderType.'</h1><h2 align = "center">Game: '.$ladderGame.'</h2>
+							<div class = "hiddenLayer">
+								<table>';
+					// Check to see if current user has a team in this ladder			
+					$currUserInTeam = "select team_in_ladder.idteam, team_in_ladder.idladder, team_in_ladder.idgame 
+										from team_in_ladder 
+										join team using (idteam) 
+										join user_has_team using (idteam) 
+										join user using (iduser) 
+										where iduser = (select iduser from user where username = '$username')";
+					if ($resultCurrTeamInLadder = $link->query($currUserInTeam)) {
+					    if (empty($rowCurrTeamInLadder = $resultCurrTeamInLadder->fetch_assoc())) {
+							echo '<div class="form">
+										<input type="submit" class="button" value="Join Ladder">
+									</div><br>';
+						}
+						
+						else {
+							$idladder = $rowCurrTeamInLadder["idladder"];
+							$idgame = $rowCurrTeamInLadder["idgame"];
+							
+							$foundLadder = mysqli_query($link, "SELECT idladder FROM ladder WHERE ladderType = '".$_GET["type"]."'");
+							$rowLadder = mysqli_fetch_assoc($foundLadder);
+							
+							$foundGame = mysqli_query($link, "SELECT idgame FROM game WHERE game_name = '".$_GET["game"]."'");
+							$rowGame = mysqli_fetch_assoc($foundGame);
+							
+							$foundOwner = mysqli_query($link, "SELECT * FROM team WHERE team_owner = '".$_SESSION["username"]."'");
+							$rowOwner = mysqli_fetch_assoc($foundOwner);
+							
+							if ($idladder == $rowLadder["idladder"] && $idgame == $rowGame["idgame"] && !empty($rowOwner)){
+								echo '<div class="form">
+									<input type="submit" class="button" value="Post A Match">
+								</div><br>';
+							}
+						}
+					}
+				    
+					$currentGame = mysqli_query($link, "SELECT idgame FROM game WHERE game_name = '$ladderGame'");
+					$rowGame = mysqli_fetch_assoc($currentGame);
+					$idgame = $rowGame["idgame"];
+				    $tableTeams = "SELECT team_name, team_owner, team_wins, team_losses, team_type, team_matches, idgame
+								FROM team
+								WHERE team_type = '".$ladderType."' AND idgame = $idgame ORDER BY team_wins DESC";
+					echo '<tr class = "headers">
+									<th>Name</th>
+									<th>Owner</th>
+									<th>Wins</th>
+									<th>Losses</th>
+									<th>Matches</th>
+									</tr>';
+				    if ($resultTeamsInLadder = $link->query($tableTeams)) {
+					    while ($rowTeamInLadder = $resultTeamsInLadder->fetch_assoc()) {
+							
+					    	$teamname = $rowTeamInLadder["team_name"];
+						    $teamowner = $rowTeamInLadder["team_owner"];
+					    	$teamwins = $rowTeamInLadder["team_wins"];
+							$teamlosses = $rowTeamInLadder["team_losses"];
+					    	$teammatches = $rowTeamInLadder["team_matches"];
+						
+					    	echo '<tr> 
+									<td><a href = "leaderboards.php?team='.$teamname.'">'.$teamname.'</a></td> 
+									<td><a href = "leaderboards.php?team='.$teamname.'&player='.$teamowner.'">'.$teamowner.'</a></td> 
+									<td>'.$teamwins.'	</td> 
+									<td>'.$teamlosses.'	</td> 
+									<td>'.$teammatches.'	</td> 
+								</tr>';
+					    }
+						
+					
+				    $link->close();
+				
+				    }
+				}
+				else if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
+					echo '<br><br><br><br><h1 id="mainContent" align = "center">Teams</h1>
+							<div class = "hiddenLayer">
+								<table>';
+					echo '<tr class = "headers">
+							<th>Name</th>
+							<th>Owner</th>
+							<th>Type</th>
+							<th>Wins</th>
+							<th>Losses</th>
+							<th>Matches</th>
+						</tr>';
 	                    $sterm = '%'.$_POST['search'].'%';
 	                    $table = "SELECT * FROM team WHERE (team_name LIKE '$sterm') ORDER BY team_wins DESC";
 				        if ($result = $link->query($table)) {
@@ -248,13 +173,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 					        	$teamowner = $row["team_owner"];
 					        	$teamtype = $row["team_type"];
 					        	$teamwins = $row["team_wins"];
+								$teamlosses = $row["team_losses"];
 					        	$teammatches = $row["team_matches"];
 						
 					        	echo '<tr> 
-							    	    <td><a href = "">'.$teamname.'</a></td> 
-								        <td><a href = "">'.$teamowner.'</a></td> 
+						    		<td><a href = "leaderboards.php?team='.$teamname.'">'.$teamname.'</a></td> 
+					    			<td><a href = "leaderboards.php?team='.$teamname.'&player='.$teamowner.'">'.$teamowner.'</a></td> 
 							        	<td>'.$teamtype.'	</td> 
 								        <td>'.$teamwins.'	</td> 
+										<td>'.$teamlosses.'	</td> 
 							        	<td>'.$teammatches.'	</td> 
 							        </tr>';
 					        }
@@ -262,6 +189,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				        }
 				}
 				else{
+					echo '<br><br><br><br><h1 id="mainContent" align = "center">Teams</h1>
+							<div class = "hiddenLayer">
+								<table>';
+					echo '<tr class = "headers">
+							<th>Name</th>
+							<th>Owner</th>
+							<th>Type</th>
+							<th>Wins</th>
+							<th>Losses</th>
+							<th>Matches</th>
+						</tr>';
 				    $table = "SELECT * FROM team ORDER BY team_wins DESC";
 				    if ($result = $link->query($table)) {
 					    while ($row = $result->fetch_assoc()) {
@@ -273,8 +211,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 					    	$teammatches = $row["team_matches"];
 						
 					    	echo '<tr> 
-						    		<td><a href = "">'.$teamname.'</a></td> 
-					    			<td><a href = "">'.$teamowner.'</a></td> 
+						    		<td><a href = "leaderboards.php?team='.$teamname.'">'.$teamname.'</a></td> 
+					    			<td><a href = "leaderboards.php?team='.$teamname.'&player='.$teamowner.'">'.$teamowner.'</a></td> 
 							    	<td>'.$teamtype.'	</td> 
 							    	<td>'.$teamwins.'	</td> 
 									<td>'.$teamlosses.'	</td> 
