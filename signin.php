@@ -62,7 +62,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;                            
-                            
+                            $resultUserStatus = mysqli_query($link, "UPDATE user SET isonline = 1 WHERE username = '".$username."'");
+							
                             // Redirect user to welcome page
                             header("location: index.php");
                         } else{

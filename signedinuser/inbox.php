@@ -25,9 +25,17 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <aside>
          <figure>
             <div id = "avatar" >
-                <img class = "toro" src = "images/toro.jpeg">
-                <figcaption><?php echo $_SESSION["username"]?></figcaption>
+                <?php
+                $userid = $_SESSION['id'];
+                $table = "SELECT image_dir FROM user_image JOIN user USING (iduser) WHERE iduser = '$userid'";
+                if($result = $link->query($table)){
+                    $row = $result->fetch_assoc();
+                    $imagelocation = "userpics/".$row['image_dir'];
+                    echo '<img class = "toro" src ='.$imagelocation.'>';
+                }
+                ?>
             </div>
+            <figcaption><?php echo $_SESSION["username"]?></figcaption>
         </figure>
         <img class = "imenu" src = "images/menu.svg">
         <nav>

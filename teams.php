@@ -91,9 +91,29 @@ session_start();
 										where iduser = (select iduser from user where username = '$username')";
 					if ($resultCurrTeamInLadder = $link->query($currUserInTeam)) {
 					    if (empty($rowCurrTeamInLadder = $resultCurrTeamInLadder->fetch_assoc())) {
-							echo '<div class="form">
-										<input type="submit" class="button" value="Join Ladder">
-									</div><br>';
+							if (!(isset($_SESSION["loggedin"]))){
+								echo "<a href = 'signin.php'>Please sign in to join a ladder</a><br>";
+							}
+							else {
+								$user_has_team = "select idteam, team_owner, team_type, idgame
+													from team
+													join user_has_team using (idteam)
+													join user using (iduser)
+													where iduser = (select iduser from user where username = '$username' AND 
+													team_owner = '$username')";
+								$foundUserTeam = mysqli_query($link, $user_has_team);
+								$rowUserTeam = mysqli_fetch_assoc($foundUserTeam);
+								
+								if (empty($rowUserTeam))
+									echo "<a href = 'loggedteams.php'>Create a team</a><a> to join ladder or ask the owner of your team.</a><br>";
+								
+								else {
+									
+									echo '<div class="form">
+											<input type="submit" class="button" value="Join Ladder">
+										</div><br>';
+								}
+							}
 						}
 						
 						else {
@@ -111,7 +131,7 @@ session_start();
 							
 							if ($idladder == $rowLadder["idladder"] && $idgame == $rowGame["idgame"] && !empty($rowOwner)){
 								echo '<div class="form">
-									<input type="submit" class="button" value="Post A Match">
+									<input type="submit" class="button" value="View/Post Match">
 								</div><br>';
 							}
 						}

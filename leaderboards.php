@@ -92,9 +92,14 @@ session_start();
 							    $username = $row['username'];
 							    $playerwins = $row['user_wins'];
 							    $playermatches = $row['user_matches'];
+								$playerOnline = $row['isonline'];
+								if ($playerOnline == 0){
+									$imagelocation = "status/offline.png";
+								}
+								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href = "">'.$username.'<a/></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';
@@ -114,15 +119,20 @@ session_start();
 											<th>Wins</th>
 											<th>Matches</th>';
 				       
-				        $table = "SELECT username, user_wins, user_matches FROM user JOIN user_has_team USING (iduser) JOIN team USING (idteam) WHERE team_name = '$teamName'";
+				        $table = "SELECT username, user_wins, user_matches, isonline FROM user JOIN user_has_team USING (iduser) JOIN team USING (idteam) WHERE team_name = '$teamName'";
 				        if ($result = $link->query($table)) {
 						    while ($row = $result->fetch_assoc()) {
 							    $username = $row['username'];
 							    $playerwins = $row['user_wins'];
 							    $playermatches = $row['user_matches'];
+								$playerOnline = $row['isonline'];
+								if ($playerOnline == 0){
+									$imagelocation = "status/offline.png";
+								}
+								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href = "">'.$username.'<a/></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';
@@ -147,9 +157,14 @@ session_start();
 							    $username = $row['username'];
 							    $playerwins = $row['user_wins'];
 							    $playermatches = $row['user_matches'];
+								$playerOnline = $row['isonline'];
+								if ($playerOnline == 0){
+									$imagelocation = "status/offline.png";
+								}
+								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href = "">'.$username.'<a/></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';
@@ -173,9 +188,14 @@ session_start();
 							    $username = $row['username'];
 							    $playerwins = $row['user_wins'];
 							    $playermatches = $row['user_matches'];
+								$playerOnline = $row['isonline'];
+								if ($playerOnline == 0){
+									$imagelocation = "status/offline.png";
+								}
+								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href = "">'.$username.'</a></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'</a><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';

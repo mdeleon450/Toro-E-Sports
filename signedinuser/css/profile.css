@@ -47,7 +47,7 @@ figure{
 figcaption{
     font-size: 1.3em;
     font-weight: bold;
-
+    text-align: center;
 }
 
 .active{
@@ -167,7 +167,7 @@ table,th,td{
         border-radius: 5px;
         position: relative;
     }
-    .close{
+    .close, .close2{
        position: absolute;
        top: -5%;
        right: -5%;
@@ -189,6 +189,19 @@ table,th,td{
         overflow:auto;
         outline: none;
         resize: none;
+    }
+      .avatarSelection{
+        display: none;
+        z-index: 1000;
+        background: rgba(85,1,1,0.5);
+        width: 50%;
+        height: 50%;
+        top: 4%;
+        left: 22%;
+        position: absolute;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
     }
     .headers{
     font-size: 1.5em;
@@ -222,6 +235,8 @@ table,th,td{
     a:hover{
         background-color: rgba(85,1,1,0.25);
     }
+	
+	
 @media only screen and (min-width: 768px){
     body{
         display: grid;
@@ -339,7 +354,7 @@ table,th,td{
         border-radius: 5px;
         position: relative;
     }
-    .close{
+    .close, .close2{
        position: absolute;
        top: -5%;
        right: -5%;
@@ -360,6 +375,19 @@ table,th,td{
         outline: none;
 
         resize: none;
+    }
+    .avatarSelection{
+        display: none;
+        z-index: 1000;
+        background: rgba(85,1,1,0.5);
+        width: 50%;
+        height: 50%;
+        top: 4%;
+        left: 22%;
+        position: absolute;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
     }
     .headers{
         font-size: 1.5em;
