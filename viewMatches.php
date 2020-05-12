@@ -72,8 +72,8 @@ session_start();
             </form>
         </div>
 		
-        <br><br><br><br><h1 id = "mainContent" align = "center">Matches</h1>
-        <div class = "subContainer">
+        <br><br><br><br><br><h1 align = "center">Matches</h1>
+        <div class = "hiddenLayer">
 			<table>
                 <tr class = "headers">
                     <th>Time</th>
@@ -81,6 +81,7 @@ session_start();
                     <th>Team</th>
                     <th>Vs. Team</th>
 					<th>Score</th>
+					<th style = "background-color: #ffff; border-right: hidden; border-top: hidden; border-bottom: hidden;"></th>
                 </tr>
 				<?php
 				   if(isset($_GET['type']) && isset($_GET['game']) && isset($_GET['team'])){
@@ -90,10 +91,10 @@ session_start();
 					   $idteam = $_GET['team'];
 					   
 					   echo '<div class="form">
-										<a href="postMatch.php?type='.$ladderType.'&game='.$ladderGame.'&team='.$idteam.'"><input type="submit" class="button" value="Post a Match"</a>
+										<a style = "text-decoration: none;" href="postMatch.php?type='.$ladderType.'&game='.$ladderGame.'&team='.$idteam.'"><input type="submit" class="button" value="Post a Match"</a>
 							</div><br>';
 					   
-					   $matchTable = "SELECT matchTime, matchStatus, idteam, vsidteam, team1score1, team1score2, team2score1, team2score2  
+						$matchTable = "SELECT matchTime, matchStatus, idteam, vsidteam, team1score1, team1score2, team2score1, team2score2  
 					    FROM esportsladdersystem.match 
 						WHERE idladder = (SELECT idladder FROM ladder WHERE ladderType = '".$ladderType."')
 						AND idgame = (SELECT idgame FROM game WHERE game_name = '".$ladderGame."') 
@@ -102,6 +103,7 @@ session_start();
 							 
 							while ($rowMatch = $resultMatches->fetch_assoc()) {
 								$matchTime = $rowMatch['matchTime'];
+								$matchTime = date('n/j/y g:i:s A', strtotime($matchTime."GMT+7"));
 								$matchStatus = $rowMatch['matchStatus'];
 								$matchTeam = $rowMatch['idteam'];
 								$matchvsTeam = $rowMatch['vsidteam'];
@@ -110,13 +112,23 @@ session_start();
 								
 								if ($matchvsTeam === null){
 									if ($matchStatus === "Posted"){
+										$teamNameQuery = "SELECT team_name FROM team WHERE idteam = $matchTeam";
+										$foundTeamName = mysqli_query($link, $teamNameQuery);
+										$rowTeamName = mysqli_fetch_assoc($foundTeamName);
+										$matchTeam = $rowTeamName['team_name'];
 										echo '<tr>
-												<td><a href="">'.$matchTime.'</a></td>
-												<td>'.$matchStatus.'</td>
+												<td>'.$matchTime.'</td>
+												<td><a href="">'.$matchStatus.'<a></td>
 												<td>'.$matchTeam.'</td>
 												<td></td>
-												<td></td>
-										</tr>'; 
+												<td></td>';
+									    if($_GET['team'] != $matchTeam){
+									        echo '<td style = "border-right: hidden; border-top: hidden; border-bottom: hidden;"><div style = "width: 50%"><a style = "text-decoration: none; float:right;" class = "button" href = "">Join Match</a></div></td>
+										      </tr>'; 
+									    }
+										else{
+									        echo '<td style = "border-right: hidden; border-top: hidden; border-bottom: hidden;"></td></tr>';
+									    }
 									}
 								}
 								else {
@@ -136,7 +148,7 @@ session_start();
                                             <td>'.$matchTeam.'</td>
                                             <td>'.$matchvsTeam.'</td>
                                             <td>'.$matchScore1.'-'.$matchScore2.'</td>
-                                    </tr>'; 
+										<tr>'; 
 								}
 							}
 						}

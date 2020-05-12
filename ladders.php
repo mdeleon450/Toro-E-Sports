@@ -104,7 +104,7 @@ session_start();
 					            $ladderGame = $row["game_name"];
         						$gameImage = $row["game_image"];
 	        					$imageLocation = 'images/games/'.$gameImage;
-		        				echo '<a style= "text-decoration: none; color: #fff" href="teams.php?type='.$ladderType.'&game='.$ladderGame.'">
+		        				echo '<a style= "text-decoration: none; color: #fff;" href="teams.php?type='.$ladderType.'&game='.$ladderGame.'">
 								<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
 		        						<div class = "ladderText" style= "position: absolute; bottom: 5%;">
 				        					<br>Ladder Type: '.$ladderType.'</br>

@@ -76,12 +76,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 								
         						$gameImage = $rowGame["game_image"];
 	        					$imageLocation = '../images/games/'.$gameImage;
-		        				echo '<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
-		        						<div class = "ladderText" style= "position: absolute; bottom: 5%;">
-				        					<br>Ladder Type: <a style= "text-decoration: none; color: #fff" href="../teams.php?type='.$ladderType.'&game='.$ladderGame.'">'.$ladderType.'</a></br>
-				        					<br>Ladder Game: '.$ladderGame.'</br> 
-						        		</div>
-							        </div>';
+		        				echo '<a style= "text-decoration: none; color: #fff;" href="../teams.php?type='.$ladderType.'&game='.$ladderGame.'">
+										<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
+												<div class = "ladderText" style= "position: absolute; bottom: 5%;">
+													<br>Ladder Type: '.$ladderType.'</br>
+													<br>Ladder Game: '.$ladderGame.'</br> 
+												</div>
+											</div>
+									</a>';
 			            }
                     }
 					else {

@@ -71,74 +71,46 @@ session_start();
                 <button name = "searchBtn" type="submit"><i class="material-icons">search</i></button>
             </form>
         </div>
-		
-        <br><br><br><br><h1 id = "mainContent" align = "center">News</h1>
-        <div class = "subContainer">
-				<?php
-				    if(isset($_GET['find'])){
-				        $find = '%'.$_GET['find'].'%';
-	                    $table = "SELECT * FROM news WHERE (title LIKE '$find') OR (author LIKE '$find') OR (contents LIKE '$find') OR (date LIKE '$sterm')";
-	                    if ($result = $link->query($table)) {
-					        while ($row = $result->fetch_assoc()) {
-					            echo '<div class = "entry">';
-					    	            $title = $row["title"];
-						                $author = $row["author"];
-						                $date = $row["date"];
-						                $contents = $row["contents"];
-            						    echo '<p id = "subContent"> 
-			            					    <h2>Title: '.$title.' </h2> 
-						            		    <h4>Date: '.$date.'	</h4> 
-								                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'.$contents.'<br> 
-								                <br>Author: <a href = "index.php?find='.$author.'">'.$author.'</a></br><br> 
-							                   </p>
-							           </div>';
-					            }
-	                    }
-				    }
-				    else if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
-				        $sterm = '%'.$_POST['search'].'%';
-	                    $table = "SELECT * FROM news WHERE (title LIKE '$sterm') OR (author LIKE '$sterm') OR (contents LIKE '$sterm') OR (date LIKE '$sterm')";
-	                    if ($result = $link->query($table)) {
-					        while ($row = $result->fetch_assoc()) {
-					            echo '<div class = "entry">';
-					    	            $title = $row["title"];
-						                $author = $row["author"];
-						                $date = $row["date"];
-						                $contents = $row["contents"];
-            						    echo '<p id = "subContent"> 
-			            					    <h2>Title: '.$title.' </h2> 
-						            		    <h4>Date: '.$date.'	</h4> 
-								                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'.$contents.'<br> 
-								                <br>Author: <a href = "index.php?find='.$author.'">'.$author.'</a></br><br> 
-							                   </p>
-							           </div>';
-					            }
-	                    }
-				    }
-	                else{
-				        $table = "SELECT * FROM news";
-				        if ($result = $link->query($table)) {
-					        while ($row = $result->fetch_assoc()) {
-					            echo '<div class = "entry">';
-					    	            $title = $row["title"];
-						                $author = $row["author"];
-						                $date = $row["date"];
-						                $contents = $row["contents"];
-            						    echo '<p id = "subContent"> 
-			            					    <h2>Title: '.$title.' </h2> 
-						            		    <h4>Date: '.$date.'	</h4> 
-								                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp'.$contents.'<br> 
-								                <br>Author: <a href = "index.php?find='.$author.'">'.$author.'</a></br><br> 
-							                   </p>
-							           </div>';
-					        }
-				        }
-					}
-					
-				$link->close();
+		<?php
+		    if(isset($_POST['Post'])){
+		        $ladderType = $_GET['type'];
+		        $game = $_GET['game'];
+		        $teamid = $_GET['team'];
+				$matchTime = $_POST["matchTime"];
+				echo $matchTime;
+		        $table = "SELECT idladder FROM ladder WHERE ladderType = '$ladderType'";
+		        if($result = $link->query($table)){
+		            $row = $result->fetch_assoc();
+		            $ladderid = $row['idladder'];
+		        }
+		        $table = "SELECT idgame FROM game WHERE game_name = '$game'";
+		        if($result = $link->query($table)){
+		            $row = $result->fetch_assoc();
+		            $gameid = $row['idgame'];
+		        }
+		        $table = "INSERT INTO esportsladdersystem.match (idgame, idladder, idteam) VALUES ('$gameid', '$ladderid', '$teamid')";
+		        echo $table;
+		        if($result = $link->query($table)){
+		            echo '<h1> Successfuly Posted Match</h1>';
+		        }
+		    }
+		?>
+        <br><br><br><br><br><h1 align = "center">Posting a Match 
+        </h1>
+        <div class = "hiddenLayer">
+			<form method = "post" style = table>
+			    <?php 
+                $ladderType = $_GET['type'];
+                $game = $_GET['game'];
+                echo '<br><input type = "text" value="'.$game.'"  disabled="disabled"/><br>
+                        <br><input type ="text" value="'.$ladderType.'"  disabled="disabled"/><br><br>';
 				?>
+				<label for="meeting-time">Choose a time for the match:</label>
+				<br><input type="datetime-local" id="myDatetimeField" name="matchTime"><br><br>
+				
+			    <input class = "button" name="Post" type = "submit" value = "Post" />
+			</form>
 		</div>
-		
     </div>
 	<script>
         (function() {
@@ -150,6 +122,24 @@ session_start();
                 e.preventDefault();
             });
         })();
+		window.addEventListener("load", function() {
+			var now = new Date();
+			var utcString = now.toISOString().substring(0,19);
+			var year = now.getFullYear();
+			var month = now.getMonth() + 1;
+			var day = now.getDate();
+			var hour = now.getHours();
+			var minute = now.getMinutes();
+			var second = now.getSeconds();
+			var localDatetime = year + "-" +
+							  (month < 10 ? "0" + month.toString() : month) + "-" +
+							  (day < 10 ? "0" + day.toString() : day) + "T" +
+							  (hour < 10 ? "0" + hour.toString() : hour) + ":" +
+							  (minute < 10 ? "0" + minute.toString() : minute) +
+							  utcString.substring(16,19);
+			var datetimeField = document.getElementById("myDatetimeField");
+			datetimeField.value = localDatetime;
+		});
     </script>
 </body>
 </html>

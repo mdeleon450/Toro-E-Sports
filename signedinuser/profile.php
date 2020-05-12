@@ -88,10 +88,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         </h1>
             <table>
                 <tr class = "headers">
-                    <th>Match ID</th>
                     <th>Match Time</th>
+					<th>Status</th>
                     <th>Ladder</th>
                     <th>Game</th>
+					<th>VS Team</th>
                     <th>Score</th>
                 </tr>
             <?php
@@ -102,19 +103,29 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     if($row = $result->fetch_assoc()){
                         $teamid = $row['idteam'];
                         // Now we find any match ids
-                        $table = "SELECT * FROM team_has_match WHERE idteam = '$teamid'";
-                        if($result2 = $link->query($table)){
-                            while ($row2 = $result2->fetch_assoc()){
-                                $matchid = $row2['idmatch'];
-                                $ladderid = $row2['idladder'];
-                                $gameid = $row2['idgame'];
-                                $score1 = $row2['team1Score'];
-                                $score2 = $row2['team2Score'];
+                        $table = "SELECT * FROM esportsladdersystem.match WHERE (idteam = '$teamid') OR (vsidteam = '$teamid')";
+                        if($result = $link->query($table)){
+                            while ($row = $result->fetch_assoc()){
+                                $matchid = $row['idmatch'];
+                                $matchStatus = $row['matchStatus'];
+								if ($matchStatus === "Posted"){
+									$ladderid = $row['idladder'];
+									$gameid = $row['idgame'];
+									$vsidteam = "";
+									$score1 = "";
+									$score2 = "";
+								}
+								else {
+									$ladderid = $row['idladder'];
+									$gameid = $row['idgame'];
+									$vsidteam = $row['vsidteam'];
+									$score1 = $row2['team1Score1'];
+									$score2 = $row2['team1Score2'];
+								}
                                 $table = "SELECT * FROM esportsladdersystem.match WHERE idmatch = '$matchid'";
-                                if($result = $link->query($table)){
-                                    $row = $result->fetch_assoc();
-                                    $matchTime = $row['matchTime'];
-                                }
+                                $matchTime = $row['matchTime'];
+                                $matchTime = date('n/j/y g:i:s A', strtotime($matchTime."GMT+7"));
+    
                                 $table = "SELECT ladderType FROM ladder WHERE idladder = '$ladderid'";
                                 if($result = $link->query($table)){
                                     $row = $result->fetch_assoc();
@@ -125,15 +136,16 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                     $row = $result->fetch_assoc();
                                     $gameName = $row['game_name'];
                                 }
-                                echo '<tr>
-                                            <td>'.$matchid.'</td>
-                                            <td>'.$matchTime.'</td>
-                                            <td>'.$ladderType.'</td>
-                                            <td>'.$gameName.'</td>
-                                            <td>'.$score1.'-'.$score2.'</td>
-                                    </tr>'; 
+								echo '<tr>
+										<td>'.$matchTime.'</td>
+										<td>'.$matchStatus.'</td>
+										<td>'.$ladderType.'</td>
+										<td>'.$gameName.'</td>
+										<td>'.$vsidteam.'</td>
+										<td>'.$score1.'-'.$score2.'</td>
+									</tr>';
                             }
-                        }
+                        } 
                     }   
                 }
             ?>
