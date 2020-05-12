@@ -56,6 +56,17 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 	<div class="mainContent" align = "right">
         <input type = "submit" class="button" value="Edit Profile" onclick="document.location.href='form.php';"/>
 	</div>
+		<p id = "subContent">
+			<?php
+			$username = $_SESSION["username"];
+			
+			$result = mysqli_query($link, "SELECT created_at FROM user WHERE username = '$username' LIMIT 1");
+			$row = mysqli_fetch_assoc($result);
+			$date = $row['created_at'];
+			$date = date('n/j/y g:i:s A', strtotime($date."GMT+7"));
+			echo "Member since: " .$date;
+			?>
+        </p>
 		<h1 id = "mainContent">
             Bio
         </h1>
@@ -75,17 +86,58 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <h1 id = "mainContent">
             Recent Matches
         </h1>
-		<p id = "subContent">
-			<?php
-			$username = $_SESSION["username"];
-			
-			$result = mysqli_query($link, "SELECT created_at FROM user WHERE username = '$username' LIMIT 1");
-			$row = mysqli_fetch_assoc($result);
-			echo "Member since: " . $row['created_at'];
-				
-				
-			?>
-        </p>
+            <table>
+                <tr class = "headers">
+                    <th>Match ID</th>
+                    <th>Match Time</th>
+                    <th>Ladder</th>
+                    <th>Game</th>
+                    <th>Score</th>
+                </tr>
+            <?php
+                // First we find the team which the user is in
+                $userid = $_SESSION['id'];
+                $table = "SELECT idteam, team_name FROM team JOIN user_has_team USING (idteam) JOIN user USING (iduser) WHERE iduser = $userid";
+                if($result = $link->query($table)){
+                    if($row = $result->fetch_assoc()){
+                        $teamid = $row['idteam'];
+                        // Now we find any match ids
+                        $table = "SELECT * FROM team_has_match WHERE idteam = '$teamid'";
+                        if($result2 = $link->query($table)){
+                            while ($row2 = $result2->fetch_assoc()){
+                                $matchid = $row2['idmatch'];
+                                $ladderid = $row2['idladder'];
+                                $gameid = $row2['idgame'];
+                                $score1 = $row2['team1Score'];
+                                $score2 = $row2['team2Score'];
+                                $table = "SELECT * FROM esportsladdersystem.match WHERE idmatch = '$matchid'";
+                                if($result = $link->query($table)){
+                                    $row = $result->fetch_assoc();
+                                    $matchTime = $row['matchTime'];
+                                }
+                                $table = "SELECT ladderType FROM ladder WHERE idladder = '$ladderid'";
+                                if($result = $link->query($table)){
+                                    $row = $result->fetch_assoc();
+                                    $ladderType = $row['ladderType'];
+                                }
+                                $table = "SELECT game_name FROM game WHERE idgame = '$gameid'";
+                                if($result = $link->query($table)){
+                                    $row = $result->fetch_assoc();
+                                    $gameName = $row['game_name'];
+                                }
+                                echo '<tr>
+                                            <td>'.$matchid.'</td>
+                                            <td>'.$matchTime.'</td>
+                                            <td>'.$ladderType.'</td>
+                                            <td>'.$gameName.'</td>
+                                            <td>'.$score1.'-'.$score2.'</td>
+                                    </tr>'; 
+                            }
+                        }
+                    }   
+                }
+            ?>
+            </table>
         <p id = "subContent">
             <?php
 			$username = $_SESSION["username"];

@@ -78,7 +78,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 	        					$imageLocation = '../images/games/'.$gameImage;
 		        				echo '<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
 		        						<div class = "ladderText" style= "position: absolute; bottom: 5%;">
-				        					<br>Ladder Type: <a style= "text-decoration: none; color: #fff" href="">'.$ladderType.'</a></br>
+				        					<br>Ladder Type: <a style= "text-decoration: none; color: #fff" href="../teams.php?type='.$ladderType.'&game='.$ladderGame.'">'.$ladderType.'</a></br>
 				        					<br>Ladder Game: '.$ladderGame.'</br> 
 						        		</div>
 							        </div>';

@@ -77,11 +77,16 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 						if ($resultTeam = $link->query($teamTable)) {
 							while ($rowTeamMember = $resultTeam->fetch_assoc()) {
 									$teamMember = $rowTeamMember['iduser'];
-									$currentTeamMember = mysqli_query($link, "SELECT username FROM user WHERE iduser = $teamMember");
+									$currentTeamMember = mysqli_query($link, "SELECT username, isonline FROM user WHERE iduser = $teamMember");
 									$rowTeamMember = mysqli_fetch_assoc($currentTeamMember);
+									$playerOnline = $rowTeamMember['isonline'];
 									$teamMemberName = $rowTeamMember['username'];
+									if($playerOnline == 0){
+									    $imagelocation = "../status/offline.png";
+									}
+									else $imagelocation = "../status/online.png";
 									echo '<tr> 
-										<td><a href = "">'.$teamMemberName.'</a></td> 
+										<td><a href = "inbox.php?send='.$teamMemberName.'">'.$teamMemberName.'</a>&nbsp<img class = "toro" src = '.$imagelocation.' style = "width:13px; height:13px;"></td> 
 									</tr>';
 							}
 						}

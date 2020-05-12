@@ -79,36 +79,38 @@ session_start();
 				<?php
                     if(!empty($_POST['search']) && isset($_POST['searchBtn'])){
 	                    $sterm = '%'.$_POST['search'].'%';
-				        $table = "SELECT game_name, game_image, ladderType from game JOIN game_has_ladder USING (idgame) JOIN ladder USING (idladder) WHERE CONCAT(ladderType, game_name) LIKE '%".$sterm."'";
+				        $table = "SELECT game_name, game_image, ladderType from game JOIN game_has_ladder USING (idgame) JOIN ladder USING (idladder) WHERE CONCAT(ladderType, game_name) LIKE '%".$sterm."' ORDER BY game_name ASC";
 				        if ($result = $link->query($table)) {
 					        while ($row = $result->fetch_assoc()) {
 					        	$ladderType = $row["ladderType"];
 					            $ladderGame = $row["game_name"];
         						$gameImage = $row["game_image"];
 	        					$imageLocation = 'images/games/'.$gameImage;
-		        				echo '<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
+		        				echo '<a style= "text-decoration: none; color: #fff" href="teams.php?type='.$ladderType.'&game='.$ladderGame.'">
+								<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
 		        						<div class = "ladderText" style= "position: absolute; bottom: 5%;">
-				        					<br>Ladder Type: <a style= "text-decoration: none; color: #fff" href="teams.php?type='.$ladderType.'&game='.$ladderGame.'">'.$ladderType.'</a></br>
+				        					<br>Ladder Type: '.$ladderType.'</br>
 				        					<br>Ladder Game: '.$ladderGame.'</br> 
 						        		</div>
-							        </div>';
+							        </div></a>';
 			                }
 				        }
 				    }
 				    else{
-				        $table = "SELECT game_name, game_image, ladderType from game JOIN game_has_ladder USING (idgame) JOIN ladder USING (idladder)";
+				        $table = "SELECT game_name, game_image, ladderType from game JOIN game_has_ladder USING (idgame) JOIN ladder USING (idladder) ORDER BY game_name ASC";
 				        if ($result = $link->query($table)) {
 					        while ($row = $result->fetch_assoc()) {
 					        	$ladderType = $row["ladderType"];
 					            $ladderGame = $row["game_name"];
         						$gameImage = $row["game_image"];
 	        					$imageLocation = 'images/games/'.$gameImage;
-		        				echo '<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
+		        				echo '<a style= "text-decoration: none; color: #fff" href="teams.php?type='.$ladderType.'&game='.$ladderGame.'">
+								<div class="ladder" style = "background-image: url('.$imageLocation.'); background-position: center; background-repeat:no-repeat; background-size:cover; ">
 		        						<div class = "ladderText" style= "position: absolute; bottom: 5%;">
-				        					<br>Ladder Type: <a style= "text-decoration: none; color: #fff" href="teams.php?type='.$ladderType.'&game='.$ladderGame.'">'.$ladderType.'</a></br>
+				        					<br>Ladder Type: '.$ladderType.'</br>
 				        					<br>Ladder Game: '.$ladderGame.'</br> 
 						        		</div>
-							        </div>';
+							        </div></a>';
 			                }
 				        }   
 				    }

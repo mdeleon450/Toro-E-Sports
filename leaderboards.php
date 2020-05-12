@@ -99,7 +99,7 @@ session_start();
 								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/>&nbsp<img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';
@@ -132,7 +132,7 @@ session_start();
 								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/>&nbsp<img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';
@@ -164,7 +164,7 @@ session_start();
 								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'<a/>&nbsp<img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';
@@ -195,7 +195,7 @@ session_start();
 								else $imagelocation = "status/online.png";
 							
 						    	echo '<tr align = "center"> 
-							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'</a><img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
+							    		<td><a href="viewProfile.php?user='.$username.'">'.$username.'</a>&nbsp<img class = "toro" src ='.$imagelocation.' style="width:13px;height:13px;" ></td>
 								    	<td>'.$playerwins.'</td> 
 								    	<td>'.$playermatches.'</td> 
 								    </tr>';

@@ -77,9 +77,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
-                // Redirect to login page
-                header("location: signin.php");
-            } else{
+				echo 'hi';
+				if (mysqli_query($link, "INSERT INTO user_image (`image_dir`,`bio`,`iduser`) VALUES ('default.png', '', (SELECT iduser FROM user WHERE username = '$username'))")){
+					// Redirect to login page
+					header("location: signin.php");
+				}
+				else {
+					echo "Something went wrong. Please try again later.";
+				}
+                
+            } 
+			else{
                 echo "Something went wrong. Please try again later.";
             }
 

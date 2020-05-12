@@ -29,7 +29,7 @@ CREATE TABLE `game` (
   `game_name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `game_image` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idgame`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `game` (
 
 LOCK TABLES `game` WRITE;
 /*!40000 ALTER TABLE `game` DISABLE KEYS */;
-INSERT INTO `game` VALUES (1,'FIFA 20','fifa20.png'),(2,'Super Smash Bros. Ultimate','smashultimate.png'),(3,'Call of Duty: Warzone','codwar.png'),(4,'Rocket League','rocketleague.png'),(5,'Fortnite','fortnite.png');
+INSERT INTO `game` VALUES (1,'FIFA 20','fifa20.png'),(2,'Super Smash Bros. Ultimate','smashultimate.png'),(3,'Call of Duty: Warzone','codwar.png'),(4,'Rocket League','rocketleague.png'),(5,'Fortnite','fortnite.png'),(6,'Smite','smite.png'),(7,'League of Legends','lol.png'),(8,'CS:GO','csgo.png'),(9,'Overwatch','overwatch.png'),(10,'Tom Clancy\'s Rainbow Six Siege','siege.png');
 /*!40000 ALTER TABLE `game` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,7 +66,7 @@ CREATE TABLE `game_has_ladder` (
 
 LOCK TABLES `game_has_ladder` WRITE;
 /*!40000 ALTER TABLE `game_has_ladder` DISABLE KEYS */;
-INSERT INTO `game_has_ladder` VALUES (1,1),(2,1),(3,1),(4,1),(5,1),(1,2),(2,2),(3,2),(4,2),(5,2),(4,3),(3,4),(4,4),(5,4);
+INSERT INTO `game_has_ladder` VALUES (1,1),(2,1),(3,1),(4,1),(5,1),(1,2),(2,2),(3,2),(4,2),(5,2),(3,3),(4,3),(3,4),(4,4),(5,4),(6,5),(7,5),(8,5),(10,5),(9,6);
 /*!40000 ALTER TABLE `game_has_ladder` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +81,7 @@ CREATE TABLE `ladder` (
   `idladder` int(11) NOT NULL AUTO_INCREMENT,
   `ladderType` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`idladder`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,7 +90,7 @@ CREATE TABLE `ladder` (
 
 LOCK TABLES `ladder` WRITE;
 /*!40000 ALTER TABLE `ladder` DISABLE KEYS */;
-INSERT INTO `ladder` VALUES (1,'Single Ladder'),(2,'Double Ladder'),(3,'Trio Ladder'),(4,'Quad Ladder');
+INSERT INTO `ladder` VALUES (1,'Single Ladder'),(2,'Double Ladder'),(3,'Trio Ladder'),(4,'Quad Ladder'),(5,'Five Ladder'),(6,'Six Ladder');
 /*!40000 ALTER TABLE `ladder` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,12 +108,19 @@ CREATE TABLE `match` (
   `idgame` int(11) NOT NULL,
   `idladder` int(11) NOT NULL,
   `idteam` int(11) NOT NULL,
+  `vsidteam` int(11) DEFAULT NULL,
+  `team1score1` int(11) DEFAULT NULL,
+  `team1score2` int(11) DEFAULT NULL,
+  `team2score1` int(11) DEFAULT NULL,
+  `team2score2` int(11) DEFAULT NULL,
   PRIMARY KEY (`idmatch`,`idgame`,`idladder`,`idteam`),
   KEY `fk_match_game_has_ladder1_idx` (`idgame`,`idladder`),
   KEY `fk_match_team1_idx` (`idteam`),
+  KEY `fk_match_team2_idx` (`vsidteam`) /*!80000 INVISIBLE */,
   CONSTRAINT `fk_match_game_has_ladder1` FOREIGN KEY (`idgame`, `idladder`) REFERENCES `game_has_ladder` (`idgame`, `idladder`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_match_team1` FOREIGN KEY (`idteam`) REFERENCES `team` (`idteam`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  CONSTRAINT `fk_match_team1` FOREIGN KEY (`idteam`) REFERENCES `team` (`idteam`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_match_team2` FOREIGN KEY (`vsidteam`) REFERENCES `team` (`idteam`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +129,7 @@ CREATE TABLE `match` (
 
 LOCK TABLES `match` WRITE;
 /*!40000 ALTER TABLE `match` DISABLE KEYS */;
-INSERT INTO `match` VALUES (1,'2020-05-06 21:14:43','Done',3,4,1),(2,'2020-05-06 21:14:43','Done',3,1,3),(3,'2020-05-06 21:14:43','Posted',3,1,6),(4,'2020-05-06 21:14:43','Rejected',1,1,7),(5,'2020-05-06 21:14:43','Disputed',1,1,8),(6,'2020-05-06 21:14:43','Done',4,2,5),(7,'2020-05-06 21:14:43','Disputed',1,1,9),(8,'2020-05-06 21:14:43','Done',1,1,10),(9,'2020-05-06 21:14:43','Done',1,1,8),(10,'2020-05-06 21:14:43','Done',3,4,4);
+INSERT INTO `match` VALUES (13,'2020-05-11 21:32:56','Posted',3,4,13,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `match` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +181,7 @@ CREATE TABLE `team` (
   PRIMARY KEY (`idteam`,`idgame`),
   KEY `fk_team_game1_idx` (`idgame`),
   CONSTRAINT `fk_team_game1` FOREIGN KEY (`idgame`) REFERENCES `game` (`idgame`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,40 +190,8 @@ CREATE TABLE `team` (
 
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
-INSERT INTO `team` VALUES (1,'The Fellas','thriftyRuffs5','Quad Ladder',2,1,1,3),(2,'Sindoze','dreadfulThrush2','Double Ladder',1,0,1,4),(3,'I Carry','excludedBuzzard7','Single Ladder',1,0,1,3),(4,'SoaR Gaming','drearyChough8','Quad Ladder',2,1,1,3),(5,'Galaxy','fondTomatoe7','Double Ladder',1,1,0,4),(6,'M0ZILL4','euphoricWasp5','Single Ladder',2,1,1,3),(7,'CR7 Fan','pitifulPonie0','Single Ladder',1,0,1,1),(8,'American Ducks','betrayedOtter5','Single Ladder',1,1,0,1),(9,'TSM','joyfulLard0','Single Ladder',0,0,0,1),(10,'Sidemen','puzzledOcelot8','Single Ladder',1,1,0,1),(12,'100 Thieves','dmartinez341','Single Ladder',0,0,0,3);
+INSERT INTO `team` VALUES (13,'The Fellas','thriftyRuffs5','Quad Ladder',0,0,0,3),(14,'SoaR Gaming','dreadfulThrush2','Quad Ladder',0,0,0,3);
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `team_has_match`
---
-
-DROP TABLE IF EXISTS `team_has_match`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `team_has_match` (
-  `idteam` int(11) NOT NULL,
-  `idmatch` int(11) NOT NULL,
-  `idgame` int(11) NOT NULL,
-  `idladder` int(11) NOT NULL,
-  `team1Score` int(11) DEFAULT NULL,
-  `team2Score` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idteam`,`idmatch`,`idgame`,`idladder`),
-  KEY `fk_team_has_match_match1_idx` (`idmatch`,`idgame`,`idladder`),
-  KEY `fk_team_has_match_team1_idx` (`idteam`),
-  CONSTRAINT `fk_team_has_match_match1` FOREIGN KEY (`idmatch`, `idgame`, `idladder`) REFERENCES `match` (`idmatch`, `idgame`, `idladder`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_team_has_match_team1` FOREIGN KEY (`idteam`) REFERENCES `team` (`idteam`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `team_has_match`
---
-
-LOCK TABLES `team_has_match` WRITE;
-/*!40000 ALTER TABLE `team_has_match` DISABLE KEYS */;
-INSERT INTO `team_has_match` VALUES (1,1,3,4,23,16),(1,10,3,4,6,15),(2,6,4,2,2,5),(3,2,3,1,2,3),(4,1,3,4,16,23),(4,10,3,4,15,6),(5,6,4,2,5,2),(6,2,3,1,3,2),(7,8,1,1,1,3),(8,5,1,1,3,0),(9,5,1,1,4,1),(9,7,1,1,5,0),(10,7,1,1,3,1),(10,8,1,1,3,1);
-/*!40000 ALTER TABLE `team_has_match` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -244,7 +219,7 @@ CREATE TABLE `team_in_ladder` (
 
 LOCK TABLES `team_in_ladder` WRITE;
 /*!40000 ALTER TABLE `team_in_ladder` DISABLE KEYS */;
-INSERT INTO `team_in_ladder` VALUES (1,4,3),(2,2,4),(3,1,3),(4,4,3),(5,2,4),(6,1,3),(7,1,1),(8,1,1),(9,1,1),(10,1,1);
+INSERT INTO `team_in_ladder` VALUES (13,4,3),(14,4,3);
 /*!40000 ALTER TABLE `team_in_ladder` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +240,7 @@ CREATE TABLE `user` (
   `user_losses` int(11) DEFAULT '0',
   `isonline` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`iduser`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +249,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'thriftyRuffs5','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(2,'annoyedGelding4','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(3,'crushedBuck8','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(4,'anxiousCur0','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(5,'dreadfulThrush2','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',0,1,1,0),(6,'awedBuzzard4','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',0,1,1,0),(7,'excludedBuzzard7','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',0,1,1,0),(8,'drearyChough8','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(9,'solidJaguar0','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(10,'humorousCur1','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(11,'thrilledLollies2','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(13,'fondTomatoe7','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,1,0,0),(14,'gleefulUnicorn5','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,1,0,0),(15,'euphoricWasp5','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,2,1,0),(16,'pitifulPonie0','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',0,1,1,0),(17,'betrayedOtter5','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,1,0,0),(18,'joyfulLard0','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',0,0,0,0),(19,'puzzledOcelot8','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-06 21:14:43',1,1,0,0),(20,'dmartinez341','$2y$10$XERXApAOpQacNfx7cmTTMu4B8f8N1OoM7mopIW.1GAc9VpA5M0kz6','2020-05-06 22:19:47',0,0,0,0);
+INSERT INTO `user` VALUES (25,'thriftyRuffs5','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(26,'annoyedGelding4','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(27,'crushedBuck8','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(28,'anxiousCur0','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(29,'dreadfulThrush2','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(30,'awedBuzzard4','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(31,'excludedBuzzard7','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0),(32,'drearyChough8','$2y$10$iWKMXTLsV54ya8JlP.et.u37kJjtZeSKghvF3E409VZgLNb4cIHPS','2020-05-11 21:13:58',0,0,0,0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -302,7 +277,7 @@ CREATE TABLE `user_has_team` (
 
 LOCK TABLES `user_has_team` WRITE;
 /*!40000 ALTER TABLE `user_has_team` DISABLE KEYS */;
-INSERT INTO `user_has_team` VALUES (1,1),(2,1),(3,1),(4,1),(5,2),(6,2),(7,3),(8,4),(9,4),(10,4),(11,4),(13,5),(14,5),(15,6),(16,7),(17,8),(18,9),(19,10),(20,12);
+INSERT INTO `user_has_team` VALUES (25,13),(26,13),(27,13),(28,13),(29,14),(30,14),(31,14),(32,14);
 /*!40000 ALTER TABLE `user_has_team` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,7 +306,7 @@ CREATE TABLE `user_image` (
 
 LOCK TABLES `user_image` WRITE;
 /*!40000 ALTER TABLE `user_image` DISABLE KEYS */;
-INSERT INTO `user_image` VALUES (1,0,'default.png','',1),(2,0,'default.png','',2),(3,0,'default.png','',3),(4,0,'default.png','',4),(5,0,'default.png','',5),(6,0,'default.png','',6),(7,0,'default.png','',7),(8,0,'default.png','',8),(9,0,'default.png','',9),(10,0,'default.png','',10),(11,0,'default.png','',11),(13,0,'default.png','',13),(14,0,'default.png','',14),(15,0,'default.png','',15),(16,0,'default.png','',16),(17,0,'default.png','',17),(18,0,'default.png','',18),(19,0,'default.png','',19),(20,1,'1589079676-nade.png','Hello',20);
+INSERT INTO `user_image` VALUES (1,0,'default.png','',25),(2,0,'default.png','',26),(3,0,'default.png','',27),(4,0,'default.png','',28),(5,0,'default.png','',29),(6,0,'default.png','',30),(7,0,'default.png','',31),(8,0,'default.png','',32);
 /*!40000 ALTER TABLE `user_image` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -344,4 +319,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-10 20:04:45
+-- Dump completed on 2020-05-11 22:55:49

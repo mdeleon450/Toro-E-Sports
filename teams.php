@@ -128,11 +128,14 @@ session_start();
 							
 							$foundOwner = mysqli_query($link, "SELECT * FROM team WHERE team_owner = '".$_SESSION["username"]."'");
 							$rowOwner = mysqli_fetch_assoc($foundOwner);
+							$idteam = $rowOwner["idteam"];
 							
 							if ($idladder == $rowLadder["idladder"] && $idgame == $rowGame["idgame"] && !empty($rowOwner)){
+								$ladderType = $_GET['type'];
+								$ladderGame = $_GET['game'];
 								echo '<div class="form">
-									<input type="submit" class="button" value="View/Post Match">
-								</div><br>';
+										<a href="viewMatches.php?type='.$ladderType.'&game='.$ladderGame.'&team='.$idteam.'"><input type="submit" class="button" value="View/Post Matches"</a>
+									</div><br>';
 							}
 						}
 					}
